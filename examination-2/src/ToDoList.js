@@ -7,14 +7,16 @@
 
 'use strict';
 
+const ToDoItem = require('./ToDoItem');
+
 const ITEM_SEP = '\n';
 
 class ToDoList {
 
-  constructor(name, color, todoItems = []) {
+  constructor(name, color, toDoItems = []) {
     this.name = name;
     this.color = color;
-    this.todoItems = todoItems;
+    this.toDoItems = toDoItems;
   }
 
   get name() {
@@ -43,30 +45,44 @@ class ToDoList {
     return this;
   }
 
-  get todoItems() {
+  get toDoItems() {
     const copy = [];
-    for (let item of this._todoItems) {
+    for (let item of this._toDoItems) {
       copy.push(item.clone());
     }
 
     return copy;
   }
 
-  set todoItems(value) {
-    this._todoItems = [];
+  set toDoItems(value) {
+    this._toDoItems = [];
     for (let item of value) {
-      this._todoItems.push(item.clone());
+      if (!(item instanceof ToDoItem)) {
+        throw new TypeError('The array must only contain references to instances of ToDoItem.');
+      }
+      this._toDoItems.push(item.clone());
     }
+    this._toDoItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
     return this;
   }
 
   get hasOverdue() {
-    return this._todoItems.filter(x => x.isOverdue).length > 0;
+    return this._toDoItems.filter(x => x.isOverdue).length > 0;
+  }
+
+  add(value) {
+    if (!(value instanceof ToDoItem)) {
+      throw new TypeError('The value must be an instance of ToDoItem.');
+    }
+    this._toDoItems.push(value);
+    this._toDoItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+
+    return this;
   }
 
   clone() {
-    return new ToDoList(this.name, this.color, this.todoItems);
+    return new ToDoList(this.name, this.color, this._toDoItems);
   }
 
   toJson() {
@@ -74,10 +90,16 @@ class ToDoList {
   }
 
   toString() {
+    let result = this.name + (this.hasOverdue ? ' *' + ITEM_SEP : ITEM_SEP);
+    this._toDoItems.forEach(item => result += item.toString() + ITEM_SEP);
+
+    return result;
   }
 
   static fromJson(json) {
     let obj = JSON.parse(json);
+
+    return new ToDoList(obj._name, obj._color, obj._toDoItems.map(x => ToDoItem.fromObject(x)));
   }
 }
 
