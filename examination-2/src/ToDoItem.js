@@ -76,7 +76,7 @@ class ToDoItem {
     return JSON.stringify(this);
   }
 
-  toString() {
+  toLog() {
     return this.text + ITEM_SEP +
       this.dueDate.toLocaleDateString() + ITEM_SEP +
       this.done + ITEM_SEP +
@@ -85,8 +85,24 @@ class ToDoItem {
         this.finishedDate);
   }
 
+  toString() {
+    let result = (this.isOverdue ? '* ' : '  ') + this.text + ITEM_SEP +
+      this.dueDate.toLocaleDateString();
+
+    if (this.done) {
+      result += ITEM_SEP +
+        this.done + ITEM_SEP +
+        this.finishedDate.toLocaleDateString();
+    }
+
+    return result;
+  }
+
   static fromJson(json) {
-    let obj = JSON.parse(json);
+    return ToDoItem.fromObject(JSON.parse(json));
+  }
+
+  static fromObject(obj) {
     // TODO: Throw exception if invalid state of obj?
     let toDoItem = new ToDoItem(obj._name, obj._dueDate);
     if (obj.hasOwnProperty('_finishedDate')) {
@@ -96,6 +112,7 @@ class ToDoItem {
 
     return toDoItem;
   }
+
 }
 
 /**
