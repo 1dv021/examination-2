@@ -28,8 +28,6 @@ class ToDoList {
       throw new Error('The value must be a string of maximum 30 characters.');
     }
     this._name = value;
-
-    return this;
   }
 
   get color() {
@@ -41,8 +39,6 @@ class ToDoList {
       throw new Error('The value must be a string of maximum 20 characters.');
     }
     this._color = value;
-
-    return this;
   }
 
   get toDoItems() {
@@ -63,8 +59,6 @@ class ToDoList {
       this._toDoItems.push(item.clone());
     }
     this._toDoItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-
-    return this;
   }
 
   get hasOverdue() {
