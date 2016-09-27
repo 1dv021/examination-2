@@ -72,7 +72,7 @@ class ToDoItem {
    * @returns {ToDoItem}
    */
   set finishedDate(value) {
-    this._finishedDate = new Date(value.valueOf());
+    this._finishedDate = Date.isDate(value) ? new Date(value.valueOf()) : undefined;
   }
 
   /**
