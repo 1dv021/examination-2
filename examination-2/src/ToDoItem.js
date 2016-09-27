@@ -18,14 +18,16 @@ class ToDoItem {
   }
 
   get text() {
-    return this._text;
+    return this._name;
   }
 
   set text(value) {
     if (!value || typeof value !== 'string' || value.length > 50) {
       throw new Error('The value must be a string of maximum 50 characters.');
     }
-    this._text = value;
+    this._name = value;
+
+    return this;
   }
 
   get dueDate() {
@@ -34,6 +36,8 @@ class ToDoItem {
 
   set dueDate(value) {
     this._dueDate = new Date(value.valueOf());
+
+    return this;
   }
 
   get done() {
@@ -46,6 +50,8 @@ class ToDoItem {
     }
     this._finishedDate = value ? new Date() : undefined;
     this._done = value;
+
+    return this;
   }
 
   get finishedDate() {
@@ -82,7 +88,7 @@ class ToDoItem {
   static fromJson(json) {
     let obj = JSON.parse(json);
     // TODO: Throw exception if invalid state of obj?
-    let toDoItem = new ToDoItem(obj._text, obj._dueDate);
+    let toDoItem = new ToDoItem(obj._name, obj._dueDate);
     if (obj.hasOwnProperty('_finishedDate')) {
       toDoItem._done = true;
       toDoItem._finishedDate = new Date(obj._finishedDate);
