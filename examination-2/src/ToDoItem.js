@@ -7,7 +7,7 @@
 
 'use strict';
 
-const ITEM_SEP = '\n';
+const ITEM_SEP = ' ';
 
 class ToDoItem {
 
@@ -74,13 +74,16 @@ class ToDoItem {
     return this.text + ITEM_SEP +
       this.dueDate.toLocaleDateString() + ITEM_SEP +
       this.done + ITEM_SEP +
-      (this.finishedDate !== undefined ? this.finishedDate.toLocaleDateString() : this.finishedDate);
+      (this.finishedDate !== undefined ?
+        this.finishedDate.toLocaleDateString() :
+        this.finishedDate);
   }
 
   static fromJson(json) {
     let obj = JSON.parse(json);
-    let toDoItem = new ToDoItem(obj._text, obj._dueDate, obj._done);
-    if (obj._done && obj.hasOwnProperty('_finishedDate')) {
+    let toDoItem = new ToDoItem(obj._text, obj._dueDate);
+    if (obj.hasOwnProperty('_finishedDate')) {
+      toDoItem._done = true;
       toDoItem._finishedDate = new Date(obj._finishedDate);
     }
 
