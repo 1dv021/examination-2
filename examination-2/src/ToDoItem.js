@@ -19,9 +19,9 @@ const ITEM_SEP = ' ';
 class ToDoItem {
   /**
    *
-   * @param text
-   * @param dueDate
-   * @param finishedDate
+   * @param {string} text
+   * @param {Date} dueDate
+   * @param {Date} finishedDate
    */
   constructor(text, dueDate, finishedDate) {
     this.text = text;
@@ -31,7 +31,7 @@ class ToDoItem {
 
   /**
    *
-   * @returns {*}
+   * @returns {string}
    */
   get text() {
     return this._text;
@@ -39,11 +39,12 @@ class ToDoItem {
 
   /**
    *
-   * @param value
-   * @returns {ToDoItem}
+   * @param {string} value
    */
   set text(value) {
-    if (!value || typeof value !== 'string' || value.length > 50) {
+    if (!value ||
+      !(typeof value === 'string' || value instanceof String) ||
+      value.length > 50) {
       throw new Error('The value must be a string of maximum 50 characters.');
     }
     this._text = value;
@@ -59,20 +60,18 @@ class ToDoItem {
 
   /**
    *
-   * @param value
-   * @returns {ToDoItem}
+   * @param {Date} value
    */
   set dueDate(value) {
-    this._dueDate = new Date(value.valueOf());
+    this._dueDate = value ? new Date(value.valueOf()) : undefined;
   }
 
   /**
    *
-   * @param value
-   * @returns {ToDoItem}
+   * @param {Date} value
    */
   set finishedDate(value) {
-    this._finishedDate = Date.isDate(value) ? new Date(value.valueOf()) : undefined;
+    this._finishedDate = value ? new Date(value.valueOf()) : undefined;
   }
 
   /**
@@ -90,7 +89,7 @@ class ToDoItem {
    * @returns {*}
    */
   get isDone() {
-    return Date.isDate(this._finishedDate);
+    return this._finishedDate instanceof Date;
   }
 
   /**
@@ -143,7 +142,7 @@ class ToDoItem {
 
   /**
    *
-   * @param obj
+   * @param {object} obj
    * @returns {ToDoItem}
    */
   static fromObject(obj) {
