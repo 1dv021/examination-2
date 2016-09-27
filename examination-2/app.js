@@ -24,7 +24,7 @@ try {
   // console.log(list.toString());
   // console.log(JSON.stringify(list));
 
-  let json = '{"_name":"Viktigt!","_color":"yellow","_toDoItems":[{"_name":"städa","_dueDate":"2016-09-27T00:00:00.000Z","_done":false},{"_name":"handla","_dueDate":"2016-09-28T00:00:00.000Z","_done":false},{"_name":"tvätta","_dueDate":"2016-09-30T00:00:00.000Z","_done":false}]}';
+  let json = '{"_name":"Viktigt!","_color":"yellow","_toDoItems":[{"_name":"städa","_dueDate":"2016-09-27T00:00:00.000Z"},{"_name":"handla","_dueDate":"2016-09-28T00:00:00.000Z"},{"_name":"tvätta","_dueDate":"2016-09-30T00:00:00.000Z"}]}';
 
   let list = ToDoList.fromJson(json);
   console.log(list);
