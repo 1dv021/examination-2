@@ -9,20 +9,39 @@
 'use strict';
 
 try {
+  const ToDoList = require('./src/ToDoList.js');
   const ToDoItem = require('./src/ToDoItem.js');
 
-  let toDoItem = new ToDoItem('handla', '2016-09-28');
+  // let toDoItems = [
+  //   new ToDoItem('handla', '2016-09-28'),
+  //   new ToDoItem('tvätta', '2016-09-30'),
+  //   new ToDoItem('städa', '2016-09-27'),
+  // ];
+  //
+  // let list = new ToDoList('Viktigt!', 'yellow', toDoItems);
+  //
+  // console.log(list);
+  // console.log(list.toString());
+  // console.log(JSON.stringify(list));
 
-  console.log(toDoItem.isOverdue);
+  let json = '{"_name":"Viktigt!","_color":"yellow","_toDoItems":[{"_name":"städa","_dueDate":"2016-09-27T00:00:00.000Z","_done":false},{"_name":"handla","_dueDate":"2016-09-28T00:00:00.000Z","_done":false},{"_name":"tvätta","_dueDate":"2016-09-30T00:00:00.000Z","_done":false}]}';
 
-  let tdi = ToDoItem.fromJson('{"_text":"handla","_dueDate":"2016-09-20T00:00:00.000Z","_done":false}');
-  console.log(tdi.isOverdue);
+  let list = ToDoList.fromJson(json);
+  console.log(list);
 
-  toDoItem.done = true;
-  tdi.done = true;
-
-  console.log(toDoItem.isOverdue);
-  console.log(tdi.isOverdue);
+  // let toDoItem = new ToDoItem('handla', '2016-09-28');
+  // console.log('---------------\n', toDoItem.toString(), '\n---------------\n');
+  //
+  // console.log(toDoItem.isOverdue);
+  //
+  // let tdi = ToDoItem.fromJson('{"_text":"handla","_dueDate":"2016-09-20T00:00:00.000Z","_done":false}');
+  // console.log(tdi.isOverdue);
+  //
+  // toDoItem.done = true;
+  // tdi.done = true;
+  //
+  // console.log(toDoItem.isOverdue);
+  // console.log(tdi.isOverdue);
 
   // toDoItem.dueDate = new Date('2016-09-24');
   // console.log(toDoItem.isOverdue);
@@ -40,7 +59,7 @@ try {
 
   // toDoItem.done = true;
   // console.log('\n---------------------\n' + toDoItem.toString());
-  console.log('\n---------------------\n' + toDoItem.toJson());
+  // console.log('\n---------------------\n' + toDoItem.toJson());
   //
   // let clone = toDoItem.clone();
   // clone.done = false;
