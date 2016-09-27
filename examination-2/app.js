@@ -1,26 +1,62 @@
 /**
- * Starting point of the application.
+ * Starting  point of the application.
  *
+ * @fileOverview Trying out some to do lists.
  * @author Mats Loock
- * @version 1.0.0
+ * @version 16.0.0
  */
 
-"use strict";
+'use strict';
 
-var statistics = require("./src/statistics");
-var descriptiveInformation;
+try {
+  const ToDoItem = require('./src/ToDoItem.js');
 
-descriptiveInformation = statistics.analyze([20, 4, 1, 2, -1, 2, 13, 2, 1, 5, 5, 5, 5, 20, 20]);
-console.log(descriptiveInformation);
+  let toDoItem = new ToDoItem('handla', '2016-09-28');
 
-descriptiveInformation = statistics.analyze([3, 5, 2, -5, 9, 2, -5, 5, 10, 4, 1, 0, -1, 9, 0]);
-console.log(descriptiveInformation);
+  console.log(toDoItem.isOverdue);
 
-descriptiveInformation = statistics.analyze([4, 2, 6, 1, 3, 7, 5, 3, 7]);
-console.log(descriptiveInformation);
+  let tdi = ToDoItem.fromJson('{"_text":"handla","_dueDate":"2016-09-20T00:00:00.000Z","_done":false}');
+  console.log(tdi.isOverdue);
 
-descriptiveInformation = statistics.analyze([4, 8, 2, 4, 5]);
-console.log(descriptiveInformation);
+  toDoItem.done = true;
+  tdi.done = true;
 
-descriptiveInformation = statistics.analyze([2, 5, 23]);
-console.log(descriptiveInformation);
+  console.log(toDoItem.isOverdue);
+  console.log(tdi.isOverdue);
+
+  // toDoItem.dueDate = new Date('2016-09-24');
+  // console.log(toDoItem.isOverdue);
+
+
+  // console.log('---------------\n', toDoItem, '\n---------------\n');
+  // console.log('---------------\n', toDoItem.toString(), '\n---------------\n');
+  //
+  // let json = JSON.stringify(toDoItem);
+  // console.log(json);
+  //
+  // let toDoItemFromJson = JSON.parse(json);
+  // console.log('---------------\n', toDoItemFromJson, '\n---------------\n');
+  // console.log('---------------\n', toDoItemFromJson.toString(), '\n---------------\n');
+
+  // toDoItem.done = true;
+  // console.log('\n---------------------\n' + toDoItem.toString());
+  console.log('\n---------------------\n' + toDoItem.toJson());
+  //
+  // let clone = toDoItem.clone();
+  // clone.done = false;
+  // clone.text = 'Hej hopp!';
+  // console.log('\n---------------------\n' + clone.toString());
+  // console.log('\n---------------------\n' + clone.toJson());
+  // clone.done = true;
+  //
+  // console.log('\n---------------------\n' + toDoItem.toString());
+  // console.log('\n---------------------\n' + toDoItem.toJson());
+  // console.log('\n---------------------\n' + clone.toString());
+  // console.log('\n---------------------\n' + clone.toJson());
+
+  //
+  // toDoItem.done = false;
+  // console.log('\n' + toDoItem.toString());
+} catch (e) {
+  console.error('ERROR: ', e.message);
+}
