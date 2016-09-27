@@ -81,6 +81,7 @@ class ToDoItem {
 
   static fromJson(json) {
     let obj = JSON.parse(json);
+    // TODO: Throw exception if invalid state of obj?
     let toDoItem = new ToDoItem(obj._text, obj._dueDate);
     if (obj.hasOwnProperty('_finishedDate')) {
       toDoItem._done = true;
