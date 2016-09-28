@@ -42,12 +42,14 @@ class ToDoItem {
    * @param {string} value
    */
   set text(value) {
-    if (!value ||
-      !(typeof value === 'string' || value instanceof String) ||
-      value.length > 50) {
-      throw new Error('The value must be a string of maximum 50 characters.');
+    if (!(typeof value === 'string' || value instanceof String)) {
+      throw new TypeError('The value must be a string.');
     }
-    this._text = value;
+    if (value.length < 1 || value.length > 50) {
+      throw new Error('The value must be a string of in between 1 to 50 characters.');
+    }
+
+    this._text = value.valueOf();
   }
 
   /**
@@ -55,7 +57,7 @@ class ToDoItem {
    * @returns {Date}
    */
   get dueDate() {
-    return new Date(this._dueDate.valueOf());
+    return this._dueDate !== undefined ? new Date(this._dueDate.valueOf()) : this._dueDate;
   }
 
   /**
@@ -63,15 +65,12 @@ class ToDoItem {
    * @param {Date} value
    */
   set dueDate(value) {
-    this._dueDate = value ? new Date(value.valueOf()) : undefined;
-  }
+    if (!(value instanceof Date) || isNaN(value)) {
+      throw new TypeError('The value must be a valid date or undefined.');
+    }
 
-  /**
-   *
-   * @param {Date} value
-   */
-  set finishedDate(value) {
-    this._finishedDate = value ? new Date(value.valueOf()) : undefined;
+    // Clone the argument to prevent privacy leak.
+    this._dueDate = new Date(value);
   }
 
   /**
@@ -82,6 +81,23 @@ class ToDoItem {
     return this._finishedDate ?
       new Date(this._finishedDate.valueOf()) :
       undefined;
+  }
+
+  /**
+   *
+   * @param {Date} value
+   */
+  set finishedDate(value) {
+    if (typeof value !== 'undefined') {
+      if (!(value instanceof Date) || isNaN(value)) {
+        throw new TypeError('The value must be a valid date or undefined.');
+      }
+
+      // Clone the argument to prevent privacy leak.
+      value = new Date(value);
+    }
+
+    this._finishedDate = value;
   }
 
   /**

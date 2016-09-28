@@ -12,6 +12,17 @@ try {
   const ToDoList = require('./src/ToDoList.js');
   const ToDoItem = require('./src/ToDoItem.js');
 
+  const tdi = new ToDoItem('Lorem ipsum', new Date('2016-10-03'));
+  tdi.isDone = true;
+
+  // let value = null;
+  // console.log((!(value instanceof Date) || !isNaN(value)) && typeof value !== 'undefined');
+
+  // let d = new Date('2016-10-03');
+  //
+  // const tdi = new ToDoItem('Lorem ipsum', 0);
+  // console.log(tdi);
+
   // let toDoItems = [
   //   new ToDoItem('handla', '2016-09-28'),
   //   new ToDoItem('tvätta', '2016-09-30'),
@@ -24,11 +35,11 @@ try {
   // console.log(list.toString());
   // console.log(JSON.stringify(list));
 
-  let json = '{"_name":"Viktigt!","_color":"blue","_toDoItems":[{"_name":"städa","_dueDate":"2016-09-27T00:00:00.000Z"},{"_name":"handla","_dueDate":"2016-09-28T00:00:00.000Z"},{"_name":"tvätta","_dueDate":"2016-09-30T00:00:00.000Z"}]}';
-
-  let list = ToDoList.fromJson(json);
-  console.log(list);
-  console.log(list.toString());
+  // let json = '{"_name":"Viktigt!","_color":"blue","_toDoItems":[{"_name":"städa","_dueDate":"2016-09-27T00:00:00.000Z"},{"_name":"handla","_dueDate":"2016-09-28T00:00:00.000Z"},{"_name":"tvätta","_dueDate":"2016-09-30T00:00:00.000Z"}]}';
+  //
+  // let list = ToDoList.fromJson(json);
+  // console.log(list);
+  // console.log(list.toString());
 
   // let toDoItem = new ToDoItem('handla', '2016-09-28');
   // console.log('---------------\n', toDoItem.toString(), '\n---------------\n');
