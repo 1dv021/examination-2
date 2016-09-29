@@ -2,7 +2,7 @@
  * Module for ToDoList.
  *
  * @author Mats Loock
- * @version 16.0.0
+ * @version 1.16.0
  */
 
 'use strict';
@@ -40,11 +40,13 @@ class ToDoList {
    * @param {string} value
    */
   set name(value) {
-    if (!value ||
-      !(typeof value === 'string' || value instanceof String) ||
-      value.length > 30) {
-      throw new Error('The value must be a string of maximum 30 characters.');
+    if (!(typeof value === 'string' || value instanceof String)) {
+      throw new TypeError('The value must be a string.');
     }
+    if (value.length < 1 || value.length > 30) {
+      throw new Error('The value must be a string of in between 1 to 30 characters.');
+    }
+
     this._name = value;
   }
 
@@ -61,10 +63,11 @@ class ToDoList {
    * @param {string} value
    */
   set color(value) {
-    if (!value ||
-      !(typeof value === 'string' || value instanceof String) ||
-      value.length > 20) {
-      throw new Error('The value must be a string of maximum 20 characters.');
+    if (!(typeof value === 'string' || value instanceof String)) {
+      throw new TypeError('The value must be a string.');
+    }
+    if (value.length < 1 || value.length > 20) {
+      throw new Error('The value must be a string of in between 1 to 20 characters.');
     }
     this._color = value;
   }

@@ -2,17 +2,17 @@
  * Tests for the ToDoItem type.
  *
  * @author Mats Loock
- * @version 1.0.1
+ * @version 1.16.0
  */
 
 'use strict';
 
 const expect = require('chai').expect;
 
-describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
+describe('ToDoItem', () => {
   const TEXT = 'Lorem ipsum';
-  const DUE_DATE = convertToKalmarTime(new Date(2016, 9, 3));
-  const FINISHED_DATE = convertToKalmarTime(new Date(2016, 8, 30));
+  const DUE_DATE = new Date(2016, 9, 3);
+  const FINISHED_DATE = new Date(2016, 8, 30);
 
   let ToDoItem;
 
@@ -29,7 +29,6 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
     beforeEach(() => {
       // Create a new ToDoItem before every test.
       toDoItem = new ToDoItem(TEXT, DUE_DATE);
-      let s = toDoItem.toString();
     });
 
     it('should be instance of ToDoItem', (done) => {
@@ -89,13 +88,9 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
         expect(() => {
           toDoItem.text = [];
         }).to.throw(TypeError);
-        done();
-      });
-
-      it('should not throw a TypeError if the text is set to a String object', (done) => {
         expect(() => {
           toDoItem.text = new String(TEXT);
-        }).to.not.throw(TypeError);
+        }).to.throw(TypeError);
         done();
       });
 
@@ -108,7 +103,7 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
 
       it('should throw an Error if the text is to a string of a length greater than 50.', (done) => {
         expect(() => {
-          toDoItem.text = TEXT.repeat(10);
+          toDoItem.text = 'A'.repeat(51);
         }).to.throw(Error);
         done();
       });
@@ -159,6 +154,30 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
         expect(toDoItem.dueDate).to.not.equal(DUE_DATE);
         done();
       });
+
+      it('should not be effected - constructor (privacy leakish)', (done) => {
+        const date = new Date(DUE_DATE);
+        toDoItem = new ToDoItem(TEXT, date);
+        date.setMonth(1);
+        expect(toDoItem.dueDate).to.not.deep.equal(date);
+        done();
+      });
+
+      it('should not be effected - get (privacy leakish)', (done) => {
+        let date = toDoItem.dueDate;
+        date.setMonth(1);
+        expect(toDoItem.dueDate).to.not.deep.equal(date);
+        done();
+      });
+
+      it('should not be effected - set (privacy leakish)', (done) => {
+        const date = new Date(DUE_DATE);
+        date.setMonth(0);
+        toDoItem.dueDate = date;
+        date.setMonth(3);
+        expect(toDoItem.dueDate).to.not.deep.equal(date);
+        done();
+      });
     });
 
     describe('finishedDate', () => {
@@ -166,17 +185,23 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
 
       beforeEach(() => {
         // Create a new ToDoItem before every test.
-        toDoItem = new ToDoItem(TEXT, DUE_DATE);
+        toDoItem = new ToDoItem(TEXT, DUE_DATE, FINISHED_DATE);
       });
 
       it('should return undefined if not set by the constructor function', (done) => {
+        toDoItem = new ToDoItem(TEXT, DUE_DATE);
         expect(toDoItem.finishedDate).to.eql(undefined);
         done();
       });
 
-      it('should be able to be changed', (done) => {
-        toDoItem.finishedDate = FINISHED_DATE;
+      it('should return the finished date set by the constructor function', (done) => {
         expect(toDoItem.finishedDate).to.eql(FINISHED_DATE);
+        done();
+      });
+
+      it('should be able to be changed', (done) => {
+        toDoItem.finishedDate = DUE_DATE;
+        expect(toDoItem.finishedDate).to.eql(DUE_DATE);
         done();
       });
 
@@ -211,6 +236,30 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
       it('should not refer to the Date object argument in the constructor function (privacy leakish)', (done) => {
         toDoItem = new ToDoItem(TEXT, DUE_DATE, FINISHED_DATE);
         expect(toDoItem.finishedDate).to.not.equal(FINISHED_DATE);
+        done();
+      });
+
+      it('should not be effected - constructor (privacy leakish)', (done) => {
+        const date = new Date(FINISHED_DATE);
+        toDoItem = new ToDoItem(TEXT, DUE_DATE, date);
+        date.setMonth(1);
+        expect(toDoItem.finishedDate).to.not.deep.equal(date);
+        done();
+      });
+
+      it('should not be effected - get (privacy leakish)', (done) => {
+        let date = toDoItem.finishedDate;
+        date.setMonth(1);
+        expect(toDoItem.finishedDate).to.not.deep.equal(date);
+        done();
+      });
+
+      it('should not be effected - set (privacy leakish)', (done) => {
+        const date = new Date(FINISHED_DATE);
+        date.setMonth(0);
+        toDoItem.finishedDate = date;
+        date.setMonth(3);
+        expect(toDoItem.finishedDate).to.not.deep.equal(date);
         done();
       });
     });
@@ -338,16 +387,49 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
         done();
       });
 
-      it('should return valid string', (done) => {
-        expect(toDoItem.toString()).to.equal('  Lorem ipsum 2016-10-03');
+      it('should return valid string when finished date is undefined', (done) => {
+        expect(toDoItem.toString()).to.equal('  Lorem ipsum ' + DUE_DATE.toLocaleDateString());
+        done();
+      });
+
+      it('should return valid string when finished date is set', (done) => {
+        toDoItem.finishedDate = FINISHED_DATE;
+        expect(toDoItem.toString()).to.equal('  Lorem ipsum ' + DUE_DATE.toLocaleDateString() + ' ' + FINISHED_DATE.toLocaleDateString());
+        done();
+      });
+
+      it('should return valid string when overdue', (done) => {
+        const date = new Date(DUE_DATE);
+        date.setYear(date.getFullYear() + 1);
+        toDoItem.finishedDate = date;
+        expect(toDoItem.toString()).to.equal('* Lorem ipsum ' + DUE_DATE.toLocaleDateString() + ' ' + date.toLocaleDateString());
+        done();
+      });
+    });
+  });
+
+  describe('Static method', () => {
+    let toDoItem;
+
+    beforeEach(() => {
+      // Create a new ToDoItem before every test.
+      toDoItem = new ToDoItem(TEXT, DUE_DATE);
+    });
+
+    describe('fromJson  method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoItem).to.have.property('fromJson').that.is.a('Function');
+        done();
+      });
+
+      it('should return a valid ToDoItem object', (done) => {
+        const toDoItem = ToDoItem.fromJson('{\"_text\":\"Lorem ipsum\",\"_dueDate\":\"2016-10-03T00:00:00.000Z\"}');
+        expect(toDoItem).to.be.an.instanceof(ToDoItem);
+        expect(toDoItem.text).to.equal('Lorem ipsum');
+        expect(toDoItem.dueDate).to.eql(new Date('2016-10-03T00:00:00.000Z'));
+        expect(toDoItem.finishedDate).to.be.a('undefined');
         done();
       });
     });
   });
 });
-
-function convertToKalmarTime(date) {
-  let kalmarOffset = 2 * 60 * 60000;
-  let userOffset = date.getTimezoneOffset() * 60000;
-  return new Date(date.getTime() + kalmarOffset + userOffset);
-}

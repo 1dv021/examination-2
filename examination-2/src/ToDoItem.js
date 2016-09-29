@@ -2,7 +2,7 @@
  * Module for ToDoItem.
  *
  * @author Mats Loock
- * @version 16.0.0
+ * @version 1.16.0
  */
 
 'use strict';
@@ -42,14 +42,14 @@ class ToDoItem {
    * @param {string} value
    */
   set text(value) {
-    if (!(typeof value === 'string' || value instanceof String)) {
+    if (typeof value !== 'string') {
       throw new TypeError('The value must be a string.');
     }
     if (value.length < 1 || value.length > 50) {
       throw new Error('The value must be a string of in between 1 to 50 characters.');
     }
 
-    this._text = value.valueOf();
+    this._text = value;
   }
 
   /**
@@ -163,7 +163,10 @@ class ToDoItem {
    */
   static fromObject(obj) {
     // TODO: Throw exception if invalid state of obj?
-    return new ToDoItem(obj._name, obj._dueDate, obj._finishedDate);
+    return new ToDoItem(obj._text, new Date(obj._dueDate),
+      obj._finishedDate ?
+        new Date(obj._finishedDate) :
+        obj._finishedDate);
   }
 }
 

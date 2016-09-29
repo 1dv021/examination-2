@@ -3,7 +3,7 @@
  *
  * @fileOverview Trying out some to do lists.
  * @author Mats Loock
- * @version 16.0.0
+ * @version 1.16.0
  */
 
 'use strict';
@@ -11,9 +11,9 @@
 try {
   const ToDoList = require('./src/ToDoList.js');
   const ToDoItem = require('./src/ToDoItem.js');
-
-  const tdi = new ToDoItem('Lorem ipsum', new Date('2016-10-03'));
-  tdi.isDone = true;
+  //
+  // const tdi = new ToDoItem('Lorem ipsum', new Date('2016-10-03'));
+  // tdi.isDone = true;
 
   // let value = null;
   // console.log((!(value instanceof Date) || !isNaN(value)) && typeof value !== 'undefined');
