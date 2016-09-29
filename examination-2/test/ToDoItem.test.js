@@ -8,12 +8,11 @@
 'use strict';
 
 const expect = require('chai').expect;
-const should = require('chai').should;
 
 describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
   const TEXT = 'Lorem ipsum';
-  const DUE_DATE = new Date('2016-10-03 00:00:00');
-  const FINISHED_DATE = new Date('2016-09-30');
+  const DUE_DATE = convertToKalmarTime(new Date(2016, 9, 3));
+  const FINISHED_DATE = convertToKalmarTime(new Date(2016, 8, 30));
 
   let ToDoItem;
 
@@ -30,6 +29,7 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
     beforeEach(() => {
       // Create a new ToDoItem before every test.
       toDoItem = new ToDoItem(TEXT, DUE_DATE);
+      let s = toDoItem.toString();
     });
 
     it('should be instance of ToDoItem', (done) => {
@@ -266,7 +266,7 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
       });
 
       it('should return true', (done) => {
-        let date = DUE_DATE;
+        let date = new Date(DUE_DATE);
         date.setMonth(DUE_DATE.getMonth() + 1);
         toDoItem.finishedDate = date;
         expect(toDoItem).to.have.property('isOverdue', true);
@@ -314,27 +314,40 @@ describe('ToDoItem - Using public properties (file: Ellipse.js)', () => {
       });
 
       it('should return a string', (done) => {
-        expect(toDoItem.toJson()).to.be.a.string;
+        expect(toDoItem.toJson()).to.be.a('string');
         done();
       });
 
       it('should return valid JSON', (done) => {
-        //expect(toDoItem.clone()).to.not.equal(toDoItem);
+        let json = '{"_text":"Lorem ipsum","_dueDate":"' + DUE_DATE.toISOString() + '"}';
+        expect(toDoItem.toJson()).to.equal(json);
         done();
       });
     });
 
-  //   describe('toString method', () => {
-  //     it('should be defined as an own property', (done) => {
-  //       expect(ToDoItem.prototype.hasOwnProperty('toString')).to.equal(true);
-  //       done();
-  //     });
-  //
-  //     it('{ a = 13.2, b = 42.1 } should return { a: 13.2, b: 42.1, area: 1745.8, circumference: 196.0 }', (done) => {
-  //       let toDoItem = new ToDoItem(13.2, 42.1);
-  //       expect(toDoItem.toString()).to.equal('{ a: 13.2, b: 42.1, area: 1745.8, circumference: 196.0 }');
-  //       done();
-  //     });
-  //   });
+    describe('toString method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoItem.prototype).to.have.ownProperty('toString');
+        expect(ToDoItem.prototype).to.have.property('toString').that.is.a('Function');
+        done();
+      });
+
+      it('should return a string', (done) => {
+        expect(ToDoItem.prototype).to.have.ownProperty('toString');
+        expect(toDoItem.toString()).to.be.a('string');
+        done();
+      });
+
+      it('should return valid string', (done) => {
+        expect(toDoItem.toString()).to.equal('  Lorem ipsum 2016-10-03');
+        done();
+      });
+    });
   });
 });
+
+function convertToKalmarTime(date) {
+  let kalmarOffset = 2 * 60 * 60000;
+  let userOffset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() + kalmarOffset + userOffset);
+}

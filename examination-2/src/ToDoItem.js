@@ -57,7 +57,7 @@ class ToDoItem {
    * @returns {Date}
    */
   get dueDate() {
-    return this._dueDate !== undefined ? new Date(this._dueDate.valueOf()) : this._dueDate;
+    return this._dueDate !== undefined ? new Date(this._dueDate) : this._dueDate;
   }
 
   /**
