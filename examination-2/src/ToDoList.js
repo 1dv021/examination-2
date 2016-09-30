@@ -40,7 +40,7 @@ class ToDoList {
    * @param {string} value
    */
   set name(value) {
-    if (!(typeof value === 'string' || value instanceof String)) {
+    if (typeof value !== 'string') {
       throw new TypeError('The value must be a string.');
     }
     if (value.length < 1 || value.length > 30) {
@@ -63,7 +63,7 @@ class ToDoList {
    * @param {string} value
    */
   set color(value) {
-    if (!(typeof value === 'string' || value instanceof String)) {
+    if (typeof value !== 'string') {
       throw new TypeError('The value must be a string.');
     }
     if (value.length < 1 || value.length > 20) {
@@ -77,12 +77,14 @@ class ToDoList {
    * @returns {ToDoItem[]}
    */
   get toDoItems() {
-    const copy = [];
-    for (let item of this._toDoItems) {
-      copy.push(item.clone());
-    }
+    // const copy = [];
+    // for (let item of this._toDoItems) {
+    //   copy.push(item.clone());
+    // }
+    //
+    // return copy;
 
-    return copy;
+    return this._toDoItems;
   }
 
   /**
@@ -90,14 +92,18 @@ class ToDoList {
    * @param {ToDoItem[]} value
    */
   set toDoItems(value) {
-    this._toDoItems = [];
+    if (!Array.isArray(value)) {
+      throw new TypeError('The value must be an array.');
+    }
+    const array = [];
     for (let item of value) {
       if (!(item instanceof ToDoItem)) {
         throw new TypeError('The array must only contain references to instances of ToDoItem.');
       }
-      this._toDoItems.push(item.clone());
+      array.push(item.clone());
     }
-    this._toDoItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+    array.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+    this._toDoItems = array;
   }
 
   /**
@@ -117,9 +123,21 @@ class ToDoList {
     if (!(value instanceof ToDoItem)) {
       throw new TypeError('The value must be an instance of ToDoItem.');
     }
-    this._toDoItems.push(value);
+    this._toDoItems.push(value.clone());
     this._toDoItems.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
 
+    return this;
+  }
+
+  /**
+   *
+   */
+  removeFinished() {
+    for (let i = this._toDoItems.length - 1; i >= 0; i -= 1) {
+      if (this._toDoItems[i].isDone) {
+        this._toDoItems[i].splice(i, 1);
+      }
+    }
     return this;
   }
 
@@ -148,17 +166,6 @@ class ToDoList {
     this._toDoItems.forEach(item => result += item.toString() + ITEM_SEP);
 
     return result;
-  }
-
-  /**
-   *
-   * @param {string} json
-   * @returns {ToDoList}
-   */
-  static fromJson(json) {
-    let obj = JSON.parse(json);
-
-    return new ToDoList(obj._name, obj._color, obj._toDoItems.map(x => ToDoItem.fromObject(x)));
   }
 }
 

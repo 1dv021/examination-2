@@ -21,7 +21,7 @@ class ToDoItem {
    *
    * @param {string} text
    * @param {Date} dueDate
-   * @param {Date} finishedDate
+   * @param {Date} [finishedDate = undefined]
    */
   constructor(text, dueDate, finishedDate) {
     this.text = text;
@@ -79,7 +79,7 @@ class ToDoItem {
    */
   get finishedDate() {
     return this._finishedDate ?
-      new Date(this._finishedDate.valueOf()) :
+      new Date(this._finishedDate) :
       undefined;
   }
 
@@ -145,28 +145,6 @@ class ToDoItem {
     }
 
     return result;
-  }
-
-  /**
-   *
-   * @param json
-   * @returns {ToDoItem}
-   */
-  static fromJson(json) {
-    return ToDoItem.fromObject(JSON.parse(json));
-  }
-
-  /**
-   *
-   * @param {object} obj
-   * @returns {ToDoItem}
-   */
-  static fromObject(obj) {
-    // TODO: Throw exception if invalid state of obj?
-    return new ToDoItem(obj._text, new Date(obj._dueDate),
-      obj._finishedDate ?
-        new Date(obj._finishedDate) :
-        obj._finishedDate);
   }
 }
 

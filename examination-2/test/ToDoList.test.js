@@ -10,10 +10,17 @@
 const expect = require('chai').expect;
 
 describe('ToDoList', () => {
+  const ToDoItem = require('../src/ToDoItem');
+
   const NAME = 'Lorem ipsum';
-  const COLOR = 'red';
   const DEFAULT_COLOR = 'yellow';
-  const TODO_ITEMS = [];
+  const COLOR = 'red';
+  const DEFAULT_TODO_ITEMS = [];
+  const TODO_ITEMS = [
+    new ToDoItem('ipsum', new Date(2050, 8, 30, 12)),
+    new ToDoItem('dolor', new Date(2050, 8, 27, 12)),
+    new ToDoItem('lorem', new Date(2016, 8, 28, 12), new Date(2016, 9, 3, 12))
+  ];
 
   let ToDoList;
 
@@ -89,13 +96,9 @@ describe('ToDoList', () => {
         expect(() => {
           toDoList.name = [];
         }).to.throw(TypeError);
-        done();
-      });
-
-      it('should not throw a TypeError if the name is set to a String object', (done) => {
         expect(() => {
           toDoList.name = new String(NAME);
-        }).to.not.throw(TypeError);
+        }).to.throw(TypeError);
         done();
       });
 
@@ -149,13 +152,9 @@ describe('ToDoList', () => {
         expect(() => {
           toDoList.color = [];
         }).to.throw(TypeError);
-        done();
-      });
-
-      it('should not throw a TypeError if the color is set to a String object', (done) => {
         expect(() => {
-          toDoList.color = new String(NAME);
-        }).to.not.throw(TypeError);
+          toDoList.color = new String(COLOR);
+        }).to.throw(TypeError);
         done();
       });
 
@@ -173,156 +172,182 @@ describe('ToDoList', () => {
         done();
       });
     });
+
+    describe('toDoItems', () => {
+      let toDoList;
+
+      beforeEach(() => {
+        // Create a new ToDoList before every test.
+        toDoList = new ToDoList(NAME, DEFAULT_COLOR);
+      });
+
+      it('should return the default to do items', (done) => {
+        expect(toDoList.toDoItems).to.deep.equal(DEFAULT_TODO_ITEMS);
+        done();
+      });
+
+      it('should be able to be changed', (done) => {
+        toDoList.toDoItems = DEFAULT_TODO_ITEMS;
+        expect(toDoList.toDoItems).to.deep.equal(DEFAULT_TODO_ITEMS);
+        done();
+      });
+
+      it('should throw a TypeError if the to do list is set to a non-array value', (done) => {
+        expect(() => {
+          toDoList.toDoItems = undefined;
+        }).to.throw(TypeError);
+        expect(() => {
+          toDoList.toDoItems = null;
+        }).to.throw(TypeError);
+        expect(() => {
+          toDoList.toDoItems = 42;
+        }).to.throw(TypeError);
+        expect(() => {
+          toDoList.toDoItems = {};
+        }).to.throw(TypeError);
+        done();
+      });
+
+      // DO NOT TEST FOR PRIVACY LEAK!
+    });
+
+    describe('hasOverdue', () => {
+      let toDoList;
+
+      beforeEach(() => {
+        // Create a new ToDoList before every test.
+        toDoList = new ToDoList(NAME);
+      });
+
+      it('should have property', (done) => {
+        expect(toDoList).to.have.property('hasOverdue');
+        done();
+      });
+
+      it('should return false when none of the ToDoItem objects is overdue', (done) => {
+        expect(toDoList).to.have.property('hasOverdue', false);
+        done();
+      });
+
+      it('should return true when at least one av the ToDoItem objects is overdue', (done) => {
+        toDoList.toDoItems = TODO_ITEMS;
+        expect(toDoList).to.have.property('hasOverdue', true);
+        done();
+      });
+
+      it('should throw an Error if the hasOverdue is set (should be read-only!)', (done) => {
+        expect(() => {
+          toDoList.hasOverdue = true;
+        }).to.throw(Error);
+        done();
+      });
+    });
   });
 
-  // describe('isDone', () => {
-  //   let toDoList;
-  //
-  //   beforeEach(() => {
-  //     // Create a new ToDoList before every test.
-  //     toDoList = new ToDoList(TEXT, DUE_DATE);
-  //   });
-  //
-  //   it('should have property', (done) => {
-  //     expect(toDoList).to.have.property('isDone');
-  //     done();
-  //   });
-  //
-  //   it('should return false', (done) => {
-  //     expect(toDoList).to.have.property('isDone', false);
-  //     done();
-  //   });
-  //
-  //   it('should return true', (done) => {
-  //     toDoList.finishedDate = FINISHED_DATE;
-  //     expect(toDoList).to.have.property('isDone', true);
-  //     done();
-  //   });
-  //
-  //   it('should throw an Error if the isDone is set (should be read-only!)', (done) => {
-  //     expect(() => {
-  //       toDoList.isDone = true;
-  //     }).to.throw(Error);
-  //     done();
-  //   });
-  // });
-  //
-  // describe('isOverdue', () => {
-  //   let toDoList;
-  //
-  //   beforeEach(() => {
-  //     // Create a new ToDoList before every test.
-  //     toDoList = new ToDoList(TEXT, DUE_DATE);
-  //   });
-  //
-  //   it('should have property', (done) => {
-  //     expect(toDoList).to.have.property('isOverdue');
-  //     done();
-  //   });
-  //
-  //   it('should return false when finishedDate is set to undefined', (done) => {
-  //     expect(toDoList).to.have.property('isOverdue', false);
-  //     done();
-  //   });
-  //
-  //   it('should return true', (done) => {
-  //     let date = new Date(DUE_DATE);
-  //     date.setMonth(DUE_DATE.getMonth() + 1);
-  //     toDoList.finishedDate = date;
-  //     expect(toDoList).to.have.property('isOverdue', true);
-  //     done();
-  //   });
-  //
-  //   it('should throw an Error if the isOverdue is set (should be read-only!)', (done) => {
-  //     expect(() => {
-  //       toDoList.isOverdue = true;
-  //     }).to.throw(Error);
-  //     done();
-  //   });
-  // });
-// });
+  describe('Prototype methods', () => {
+    let toDoList;
 
-// describe('Prototype', () => {
-//   let toDoList;
-//
-//   beforeEach(() => {
-//     // Create a new ToDoList before every test.
-//     toDoList = new ToDoList(TEXT, DUE_DATE);
-//   });
-//
-//   describe('clone method', () => {
-//     it('should be defined', (done) => {
-//       expect(ToDoList.prototype).to.have.property('clone').that.is.a('Function');
-//       done();
-//     });
-//
-//     it('should return a ToDoList object', (done) => {
-//       expect(toDoList.clone()).to.be.an.instanceof(ToDoList);
-//       done();
-//     });
-//
-//     it('should return a copy', (done) => {
-//       expect(toDoList.clone()).to.not.equal(toDoList);
-//       done();
-//     });
-//   });
-//
-//   describe('toJson method', () => {
-//     it('should be defined', (done) => {
-//       expect(ToDoList.prototype).to.have.property('toJson').that.is.a('Function');
-//       done();
-//     });
-//
-//     it('should return a string', (done) => {
-//       expect(toDoList.toJson()).to.be.a('string');
-//       done();
-//     });
-//
-//     it('should return valid JSON', (done) => {
-//       let json = '{"_text":"Lorem ipsum","_dueDate":"' + DUE_DATE.toISOString() + '"}';
-//       expect(toDoList.toJson()).to.equal(json);
-//       done();
-//     });
-//   });
-//
-//   describe('toString method', () => {
-//     it('should be defined', (done) => {
-//       expect(ToDoList.prototype).to.have.ownProperty('toString');
-//       expect(ToDoList.prototype).to.have.property('toString').that.is.a('Function');
-//       done();
-//     });
-//
-//     it('should return a string', (done) => {
-//       expect(ToDoList.prototype).to.have.ownProperty('toString');
-//       expect(toDoList.toString()).to.be.a('string');
-//       done();
-//     });
-//
-//     it('should return valid string', (done) => {
-//       expect(toDoList.toString()).to.equal('  Lorem ipsum 2016-10-03');
-//       done();
-//     });
-//   });
-// });
-//
-// describe('Static method', () => {
-//   let toDoList;
-//
-//   beforeEach(() => {
-//     // Create a new ToDoList before every test.
-//     toDoList = new ToDoList(TEXT, DUE_DATE);
-//   });
-//
-//   describe('fromJson  method', () => {
-//     it('should be defined', (done) => {
-//       expect(ToDoList).to.have.property('fromJson').that.is.a('Function');
-//       done();
-//     });
-//
-//     it('should return a ToDoList object', (done) => {
-//       expect(ToDoList.fromJson('{\"_text\":\"Lorem ipsum\",\"_dueDate\":\"2016-10-03T00:00:00.000Z\"}')).to.be.an.instanceof(ToDoList);
-//       done();
-//     });
-//   });
-// });
+    beforeEach(() => {
+      // Create a new ToDoList before every test.
+      toDoList = new ToDoList(NAME);
+    });
+
+    describe('add method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoList.prototype).to.have.property('add').that.is.a('Function');
+        done();
+      });
+
+      it('should add a clone and reorder', (done) => {
+        toDoList.add(TODO_ITEMS[0]);
+        toDoList.add(TODO_ITEMS[1]);
+        toDoList.add(TODO_ITEMS[2]);
+        let toDoItems = toDoList.toDoItems;
+        expect(toDoList.toDoItems.length, 'expected three elements').to.equal(3);
+        expect(toDoItems[0], 'unexpected first element').to.deep.equal(TODO_ITEMS[2]);
+        expect(toDoItems[1], 'unexpected second element').to.deep.equal(TODO_ITEMS[1]);
+        expect(toDoItems[2], 'unexpected third element').to.deep.equal(TODO_ITEMS[0]);
+        done();
+      });
+    });
+
+    describe('removeFinished method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoList.prototype).to.have.property('removeFinished').that.is.a('Function');
+        done();
+      });
+
+      it('should remove finished to do items', (done) => {
+        toDoList.toDoItems = TODO_ITEMS;
+        toDoList.removeFinished();
+        expect(toDoList.toDoItems.filter(x => x.isOverdue).length).to.equal(0);
+        done();
+      });
+    });
+
+    describe('clone method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoList.prototype).to.have.property('clone').that.is.a('Function');
+        done();
+      });
+
+      it('should return a ToDoItem object', (done) => {
+        expect(toDoList.clone()).to.be.an.instanceof(ToDoList);
+        done();
+      });
+
+      it('should return a copy', (done) => {
+        expect(toDoList.clone()).to.not.equal(toDoList);
+        expect(toDoList.clone()).to.deep.equal(toDoList);
+        done();
+      });
+    });
+
+    describe('toJson method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoItem.prototype).to.have.property('toJson').that.is.a('Function');
+        done();
+      });
+
+      it('should return a string', (done) => {
+        expect(toDoList.toJson()).to.be.a('string');
+        done();
+      });
+
+      it('should return valid JSON', (done) => {
+        toDoList.toDoItems = TODO_ITEMS;
+        expect(() => {
+          JSON.parse(toDoList.toJson());
+        }).not.to.throw(SyntaxError);
+        done();
+      });
+    });
+
+    describe('toString method', () => {
+      it('should be defined', (done) => {
+        expect(ToDoItem.prototype).to.have.ownProperty('toString');
+        expect(ToDoItem.prototype).to.have.property('toString').that.is.a('Function');
+        done();
+      });
+
+      it('should return a string', (done) => {
+        expect(ToDoItem.prototype).to.have.ownProperty('toString');
+        expect(toDoList.toString()).to.be.a('string');
+        done();
+      });
+
+      it('should return valid string when there are no to do items', (done) => {
+        expect(toDoList.toString()).to.equal('Lorem ipsum\n');
+        done();
+      });
+
+      it('should return valid string when overdue', (done) => {
+        toDoList.toDoItems = TODO_ITEMS;
+        expect(toDoList.toString().substr(0, 22)).to.equal('Lorem ipsum *\n* lorem ');
+        done();
+      });
+    });
+
+    // fromJson
+  });
 });

@@ -331,7 +331,7 @@ describe('ToDoItem', () => {
     });
   });
 
-  describe('Prototype', () => {
+  describe('Prototype methods', () => {
     let toDoItem;
 
     beforeEach(() => {
@@ -352,6 +352,7 @@ describe('ToDoItem', () => {
 
       it('should return a copy', (done) => {
         expect(toDoItem.clone()).to.not.equal(toDoItem);
+        expect(toDoItem.clone()).to.deep.equal(toDoItem);
         done();
       });
     });
@@ -409,13 +410,6 @@ describe('ToDoItem', () => {
   });
 
   describe('Static method', () => {
-    let toDoItem;
-
-    beforeEach(() => {
-      // Create a new ToDoItem before every test.
-      toDoItem = new ToDoItem(TEXT, DUE_DATE);
-    });
-
     describe('fromJson  method', () => {
       it('should be defined', (done) => {
         expect(ToDoItem).to.have.property('fromJson').that.is.a('Function');
@@ -423,12 +417,28 @@ describe('ToDoItem', () => {
       });
 
       it('should return a valid ToDoItem object', (done) => {
-        const toDoItem = ToDoItem.fromJson('{\"_text\":\"Lorem ipsum\",\"_dueDate\":\"2016-10-03T00:00:00.000Z\"}');
+        const toDoItem = ToDoItem.fromJson('{\"text\":\"Lorem ipsum\",\"dueDate\":\"2016-10-03T00:00:00.000Z\"}');
         expect(toDoItem).to.be.an.instanceof(ToDoItem);
         expect(toDoItem.text).to.equal('Lorem ipsum');
         expect(toDoItem.dueDate).to.eql(new Date('2016-10-03T00:00:00.000Z'));
         expect(toDoItem.finishedDate).to.be.a('undefined');
         done();
+      });
+
+      describe('fromObject  method', () => {
+        it('should be defined', (done) => {
+          expect(ToDoItem).to.have.property('fromObject').that.is.a('Function');
+          done();
+        });
+
+        it('should return a valid ToDoItem object', (done) => {
+          const toDoItem = ToDoItem.fromJson('{\"_text\":\"Lorem ipsum\",\"dueDate\":\"2016-10-03T00:00:00.000Z\"}');
+          expect(toDoItem).to.be.an.instanceof(ToDoItem);
+          expect(toDoItem.text).to.equal('Lorem ipsum');
+          expect(toDoItem.dueDate).to.eql(new Date('2016-10-03T00:00:00.000Z'));
+          expect(toDoItem.finishedDate).to.be.a('undefined');
+          done();
+        });
       });
     });
   });
