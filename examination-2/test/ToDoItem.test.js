@@ -363,14 +363,12 @@ describe('ToDoItem', () => {
         done();
       });
 
-      it('should return a string', (done) => {
-        expect(toDoItem.toJson()).to.be.a('string');
-        done();
-      });
-
       it('should return valid JSON', (done) => {
-        let json = '{"_text":"Lorem ipsum","_dueDate":"' + DUE_DATE.toISOString() + '"}';
-        expect(toDoItem.toJson()).to.equal(json);
+        let json = toDoItem.toJson();
+        expect(() => {
+          JSON.parse(json);
+        }).not.to.throw(SyntaxError);
+        expect(json.indexOf(TEXT), 'expected json to contain \'Lorem ipsum\'').to.not.equal(-1);
         done();
       });
     });
@@ -405,40 +403,6 @@ describe('ToDoItem', () => {
         toDoItem.finishedDate = date;
         expect(toDoItem.toString()).to.equal('* Lorem ipsum ' + DUE_DATE.toLocaleDateString() + ' ' + date.toLocaleDateString());
         done();
-      });
-    });
-  });
-
-  describe('Static method', () => {
-    describe('fromJson  method', () => {
-      it('should be defined', (done) => {
-        expect(ToDoItem).to.have.property('fromJson').that.is.a('Function');
-        done();
-      });
-
-      it('should return a valid ToDoItem object', (done) => {
-        const toDoItem = ToDoItem.fromJson('{\"text\":\"Lorem ipsum\",\"dueDate\":\"2016-10-03T00:00:00.000Z\"}');
-        expect(toDoItem).to.be.an.instanceof(ToDoItem);
-        expect(toDoItem.text).to.equal('Lorem ipsum');
-        expect(toDoItem.dueDate).to.eql(new Date('2016-10-03T00:00:00.000Z'));
-        expect(toDoItem.finishedDate).to.be.a('undefined');
-        done();
-      });
-
-      describe('fromObject  method', () => {
-        it('should be defined', (done) => {
-          expect(ToDoItem).to.have.property('fromObject').that.is.a('Function');
-          done();
-        });
-
-        it('should return a valid ToDoItem object', (done) => {
-          const toDoItem = ToDoItem.fromJson('{\"_text\":\"Lorem ipsum\",\"dueDate\":\"2016-10-03T00:00:00.000Z\"}');
-          expect(toDoItem).to.be.an.instanceof(ToDoItem);
-          expect(toDoItem.text).to.equal('Lorem ipsum');
-          expect(toDoItem.dueDate).to.eql(new Date('2016-10-03T00:00:00.000Z'));
-          expect(toDoItem.finishedDate).to.be.a('undefined');
-          done();
-        });
       });
     });
   });

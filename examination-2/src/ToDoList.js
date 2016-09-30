@@ -135,7 +135,7 @@ class ToDoList {
   removeFinished() {
     for (let i = this._toDoItems.length - 1; i >= 0; i -= 1) {
       if (this._toDoItems[i].isDone) {
-        this._toDoItems[i].splice(i, 1);
+        this._toDoItems.splice(i, 1);
       }
     }
     return this;

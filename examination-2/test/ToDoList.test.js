@@ -309,16 +309,13 @@ describe('ToDoList', () => {
         done();
       });
 
-      it('should return a string', (done) => {
-        expect(toDoList.toJson()).to.be.a('string');
-        done();
-      });
-
       it('should return valid JSON', (done) => {
         toDoList.toDoItems = TODO_ITEMS;
+        let json = toDoList.toJson();
         expect(() => {
-          JSON.parse(toDoList.toJson());
+          JSON.parse(json);
         }).not.to.throw(SyntaxError);
+        expect(json.indexOf(NAME), 'expected json to contain \'Lorem ipsum\'').to.not.equal(-1);
         done();
       });
     });
