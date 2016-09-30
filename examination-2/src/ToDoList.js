@@ -77,14 +77,12 @@ class ToDoList {
    * @returns {ToDoItem[]}
    */
   get toDoItems() {
-    // const copy = [];
-    // for (let item of this._toDoItems) {
-    //   copy.push(item.clone());
-    // }
-    //
-    // return copy;
+    const copy = [];
+    for (let item of this._toDoItems) {
+      copy.push(item.clone());
+    }
 
-    return this._toDoItems;
+    return copy;
   }
 
   /**

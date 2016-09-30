@@ -11,83 +11,47 @@
 try {
   const ToDoList = require('./src/ToDoList.js');
   const ToDoItem = require('./src/ToDoItem.js');
-  //
-  // const tdi = new ToDoItem('Lorem ipsum', new Date('2016-10-03'));
-  // tdi.isDone = true;
 
-  // let value = null;
-  // console.log((!(value instanceof Date) || !isNaN(value)) && typeof value !== 'undefined');
+  // ToDoItem
+  {
+    // uppgift som inte genomförd och inte försenad
+    let toDoItem = new ToDoItem('köpa julklappar', new Date(2032, 11, 24));
+    console.log(toDoItem.toString()); // OUTPUT: '  köpa julklappar 2032-12-24'
+    console.log();
 
-  // let d = new Date('2016-10-03');
-  //
-  // const tdi = new ToDoItem('Lorem ipsum', 0);
-  // console.log(tdi);
+    // uppgift som är genomförd i tid
+    toDoItem.finishedDate = new Date(2032, 11, 20);
+    console.log(toDoItem.toString()); // OUTPUT: '  köpa julklappar 2032-12-24 2032-12-20'
+    console.log();
 
-  // let toDoItems = [
-  //   new ToDoItem('handla', '2016-09-28'),
-  //   new ToDoItem('tvätta', '2016-09-30'),
-  //   new ToDoItem('städa', '2016-09-27'),
-  // ];
-  //
-  // let list = new ToDoList('Viktigt!', 'yellow', toDoItems);
-  //
-  // console.log(list);
-  // console.log(list.toString());
-  // console.log(JSON.stringify(list));
+    // uppgift som är genomförd men försent
+    toDoItem.finishedDate = new Date(2032, 11, 25);
+    console.log(toDoItem.toString()); // OUTPUT: '* köpa julklappar 2032-12-24 2032-12-25'
+    console.log();
 
-  // let json = '{"_name":"Viktigt!","_color":"blue","_toDoItems":[{"_name":"städa","_dueDate":"2016-09-27T00:00:00.000Z"},{"_name":"handla","_dueDate":"2016-09-28T00:00:00.000Z"},{"_name":"tvätta","_dueDate":"2016-09-30T00:00:00.000Z"}]}';
-  //
-  // let list = ToDoList.fromJson(json);
-  // console.log(list);
-  // console.log(list.toString());
+    // uppgift som inte är genomförd och som är försenad
+    toDoItem = new ToDoItem('åka till OS i Brasilien', new Date(2016, 7, 21));
+    console.log(toDoItem.toString()); // OUTPUT: '* åka till OS i Brasilien 2016-08-21'
+    console.log();
+  }
 
-  // let toDoItem = new ToDoItem('handla', '2016-09-28');
-  // console.log('---------------\n', toDoItem.toString(), '\n---------------\n');
-  //
-  // console.log(toDoItem.isOverdue);
-  //
-  // let tdi = ToDoItem.fromJson('{"_text":"handla","_dueDate":"2016-09-20T00:00:00.000Z","_done":false}');
-  // console.log(tdi.isOverdue);
-  //
-  // toDoItem.done = true;
-  // tdi.done = true;
-  //
-  // console.log(toDoItem.isOverdue);
-  // console.log(tdi.isOverdue);
+  console.log('---------------------------------------------------');
 
-  // toDoItem.dueDate = new Date('2016-09-24');
-  // console.log(toDoItem.isOverdue);
+  // ToDoList
+  {
+    let toDoItems = [
+      new ToDoItem('köpa julklappar', new Date(2032, 11, 24)),
+      new ToDoItem('åka till OS i Stockholm', new Date(2026, 7, 3))
+    ];
 
+    // lista utan förseningar
+    let list = new ToDoList('Viktigt!', 'yellow', toDoItems);
+    console.log(list.toString());
 
-  // console.log('---------------\n', toDoItem, '\n---------------\n');
-  // console.log('---------------\n', toDoItem.toString(), '\n---------------\n');
-  //
-  // let json = JSON.stringify(toDoItem);
-  // console.log(json);
-  //
-  // let toDoItemFromJson = JSON.parse(json);
-  // console.log('---------------\n', toDoItemFromJson, '\n---------------\n');
-  // console.log('---------------\n', toDoItemFromJson.toString(), '\n---------------\n');
-
-  // toDoItem.done = true;
-  // console.log('\n---------------------\n' + toDoItem.toString());
-  // console.log('\n---------------------\n' + toDoItem.toJson());
-  //
-  // let clone = toDoItem.clone();
-  // clone.done = false;
-  // clone.text = 'Hej hopp!';
-  // console.log('\n---------------------\n' + clone.toString());
-  // console.log('\n---------------------\n' + clone.toJson());
-  // clone.done = true;
-  //
-  // console.log('\n---------------------\n' + toDoItem.toString());
-  // console.log('\n---------------------\n' + toDoItem.toJson());
-  // console.log('\n---------------------\n' + clone.toString());
-  // console.log('\n---------------------\n' + clone.toJson());
-
-  //
-  // toDoItem.done = false;
-  // console.log('\n' + toDoItem.toString());
+    // lista med försenad uppgift
+    list.add(new ToDoItem('nyårsfest', new Date(2015, 11, 31), new Date(2016, 2, 2)));
+    console.log(list.toString());
+  }
 } catch (e) {
   console.error('ERROR: ', e.message);
 }
