@@ -2,7 +2,7 @@
  * Tests for the ToDoItem type.
  *
  * @author Mats Loock
- * @version 1.16.0
+ * @version 1.16.1
  */
 
 'use strict';
@@ -310,6 +310,7 @@ describe('ToDoItem', () => {
       });
 
       it('should return false when finishedDate is set to undefined', (done) => {
+        toDoItem.dueDate = new Date(2032, 11, 24);
         expect(toDoItem).to.have.property('isOverdue', false);
         done();
       });
@@ -387,7 +388,8 @@ describe('ToDoItem', () => {
       });
 
       it('should return valid string when finished date is undefined', (done) => {
-        expect(toDoItem.toString()).to.equal('  Lorem ipsum ' + DUE_DATE.toLocaleDateString());
+        toDoItem.dueDate = new Date(2032, 11, 24);
+        expect(toDoItem.toString()).to.equal('  Lorem ipsum ' + new Date(2032, 11, 24).toLocaleDateString());
         done();
       });
 
