@@ -9,6 +9,7 @@
 
 /**
  *
+ * @constant
  * @type {string}
  */
 const ITEM_SEP = ' ';
@@ -57,7 +58,7 @@ class ToDoItem {
    * @returns {Date}
    */
   get dueDate() {
-    return this._dueDate !== undefined ? new Date(this._dueDate) : this._dueDate;
+    return new Date(this._dueDate);
   }
 
   /**
@@ -65,8 +66,8 @@ class ToDoItem {
    * @param {Date} value
    */
   set dueDate(value) {
-    if (!(value instanceof Date) || isNaN(value)) {
-      throw new TypeError('The value must be a valid date or undefined.');
+    if (!(value instanceof Date) || Number.isNaN(value)) {
+      throw new TypeError('The value must be a valid date.');
     }
 
     // Clone the argument to prevent privacy leak.
@@ -89,7 +90,7 @@ class ToDoItem {
    */
   set finishedDate(value) {
     if (typeof value !== 'undefined') {
-      if (!(value instanceof Date) || isNaN(value)) {
+      if (!(value instanceof Date) || Number.isNaN(value)) {
         throw new TypeError('The value must be a valid date or undefined.');
       }
 
