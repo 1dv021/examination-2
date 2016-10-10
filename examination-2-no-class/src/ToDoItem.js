@@ -52,6 +52,7 @@ function ToDoItem(text, dueDate, finishedDate) {
    * @name ToDoItem#text
    */
   Object.defineProperty(this, 'text', {
+    enumerable: true,
     get: () => {
       return _text;
     },
@@ -75,6 +76,7 @@ function ToDoItem(text, dueDate, finishedDate) {
    * @name ToDoItem#dueDate
    */
   Object.defineProperty(this, 'dueDate', {
+    enumerable: true,
     get: () => {
       return new Date(_dueDate);
     },
@@ -96,6 +98,7 @@ function ToDoItem(text, dueDate, finishedDate) {
    * @name ToDoItem#finishedDate
    */
   Object.defineProperty(this, 'finishedDate', {
+    enumerable: true,
     get: () => {
       return _finishedDate ? new Date(_finishedDate) : undefined;
     },
@@ -121,6 +124,7 @@ function ToDoItem(text, dueDate, finishedDate) {
    * @name ToDoItem#isDone
    */
   Object.defineProperty(this, 'isDone', {
+    enumerable: true,
     get: () => {
       return _finishedDate instanceof Date;
     }
@@ -133,6 +137,7 @@ function ToDoItem(text, dueDate, finishedDate) {
    * @name ToDoItem#isOverdue
    */
   Object.defineProperty(this, 'isOverdue', {
+    enumerable: true,
     get: () => {
       return (_finishedDate || new Date()) > _dueDate;
     }
@@ -159,16 +164,7 @@ ToDoItem.prototype.clone = function() {
  * @returns {string}
  */
 ToDoItem.prototype.toJson = function() {
-  const obj = {
-    text: this.text,
-    dueDate: this.dueDate
-  };
-
-  if (this.finishedDate) {
-    obj.finishedDate = this.finishedDate;
-  }
-
-  return JSON.stringify(obj);
+  return JSON.stringify(this);
 };
 
 /**

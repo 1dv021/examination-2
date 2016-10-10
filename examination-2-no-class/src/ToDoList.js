@@ -54,6 +54,7 @@ function ToDoList(name, color = 'yellow', toDoItems = []) {
    * @name ToDoItem#name
    */
   Object.defineProperty(this, 'name', {
+    enumerable: true,
     get: () => {
       return _name;
     },
@@ -77,6 +78,7 @@ function ToDoList(name, color = 'yellow', toDoItems = []) {
    * @name ToDoItem#color
    */
   Object.defineProperty(this, 'color', {
+    enumerable: true,
     get: () => {
       return _color;
     },
@@ -100,6 +102,7 @@ function ToDoList(name, color = 'yellow', toDoItems = []) {
    * @name ToDoItem#toDoItems
    */
   Object.defineProperty(this, 'toDoItems', {
+    enumerable: true,
     get: () => {
       const copy = [];
       for (let item of _toDoItems) {
@@ -192,11 +195,7 @@ ToDoList.prototype.clone = function() {
  * @returns {string}
  */
 ToDoList.prototype.toJson = function() {
-  return JSON.stringify({
-    name: this.name,
-    color: this.color,
-    toDoItems: this.toDoItems
-  });
+  return JSON.stringify(this);
 };
 
 /**
