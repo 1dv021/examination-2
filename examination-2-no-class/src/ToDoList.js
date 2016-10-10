@@ -135,6 +135,7 @@ function ToDoList(name, color = 'yellow', toDoItems = []) {
    * @name ToDoItem#hasOverdue
    */
   Object.defineProperty(this, 'hasOverdue', {
+    enumerable: true,
     get: () => {
       return _toDoItems.filter(x => x.isOverdue).length > 0;
     }
@@ -188,6 +189,21 @@ ToDoList.prototype.removeFinished = function() {
 ToDoList.prototype.clone = function() {
   return new ToDoList(this.name, this.color, this.toDoItems);
 };
+
+// /**
+//  * Customizes the value of this ToDoList object to be returned when
+//  * being stringified.
+//  *
+//  * @returns {{name: string, color: string, toDoItems: ToDoItem[]}}
+//  */
+// ToDoList.prototype.toJSON = function() {
+//   return {
+//     name: this.name,
+//     color: this.color,
+//     toDoItems: this.toDoItems,
+//     hasOverdue: this.hasOverdue
+//   };
+// };
 
 /**
  * Converts the value of this ToDoList object into JSON text.

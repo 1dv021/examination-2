@@ -158,6 +158,23 @@ ToDoItem.prototype.clone = function() {
   return new ToDoItem(this.text, this.dueDate, this.finishedDate);
 };
 
+
+// /**
+//  * Customizes the value of this ToDoItem object to be returned when
+//  * being stringified.
+//  *
+//  * @returns {{name: string, color: string, toDoItems: ToDoItem[]}}
+//  */
+// ToDoItem.prototype.toJSON = function() {
+//   return {
+//     text: this.text,
+//     dueDate: this.dueDate,
+//     finishedDate: this.finishedDate,
+//     isDone: this.isDone,
+//     isOverdue: this.isOverdue
+//   };
+// };
+
 /**
  * Converts the value of this ToDoItem object into JSON text.
  *

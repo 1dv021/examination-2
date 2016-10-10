@@ -127,6 +127,20 @@ class ToDoItem {
 
   /**
    *
+   * @returns {{text: string, dueDate: Date, finishedDate: *, isDone: *, isOverdue: boolean}}
+   */
+  toJSON() {
+    return {
+      text: this.text,
+      dueDate: this.dueDate,
+      finishedDate: this.finishedDate,
+      isDone: this.isDone,
+      isOverdue: this.isOverdue
+    };
+  }
+
+  /**
+   *
    */
   toJson() {
     return JSON.stringify(this);

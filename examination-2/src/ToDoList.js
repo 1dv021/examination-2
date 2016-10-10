@@ -149,6 +149,18 @@ class ToDoList {
 
   /**
    *
+   * @returns {{name: string, color: string, toDoItems: ToDoItem[]}}
+   */
+  toJSON() {
+    return {
+      name: this.name,
+      color: this.color,
+      toDoItems: this.toDoItems
+    };
+  }
+
+  /**
+   *
    * @returns {string}
    */
   toJson() {
