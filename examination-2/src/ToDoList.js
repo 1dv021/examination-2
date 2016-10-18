@@ -77,12 +77,14 @@ class ToDoList {
    * @returns {ToDoItem[]}
    */
   get toDoItems() {
-    const copy = [];
-    for (let item of this._toDoItems) {
-      copy.push(item.clone());
-    }
+    // const copy = [];
+    // for (let item of this._toDoItems) {
+    //   copy.push(item.clone());
+    // }
+    //
+    // return copy;
 
-    return copy;
+    return this._toDoItems.map(x => x.clone());
   }
 
   /**
@@ -93,15 +95,22 @@ class ToDoList {
     if (!Array.isArray(value)) {
       throw new TypeError('The value must be an array.');
     }
-    const array = [];
-    for (let item of value) {
-      if (!(item instanceof ToDoItem)) {
+    // const array = [];
+    // for (let item of value) {
+    //   if (!(item instanceof ToDoItem)) {
+    //     throw new TypeError('The array must only contain references to instances of ToDoItem.');
+    //   }
+    //   array.push(item.clone());
+    // }
+    // array.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+    // this._toDoItems = array;
+
+    this._toDoItems = value.map(x => {
+      if (!(x instanceof ToDoItem)) {
         throw new TypeError('The array must only contain references to instances of ToDoItem.');
       }
-      array.push(item.clone());
-    }
-    array.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
-    this._toDoItems = array;
+      return x.clone();
+    }).sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
   }
 
   /**
