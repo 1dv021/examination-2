@@ -128,7 +128,7 @@ CardTable.prototype.playRound = function() {
 
   playerPointValue = this.player.handValue;
 
-  if (playerPointValue < 21) {
+  if (playerPointValue < 21 && this.player.hand.count < 5) {
     while (this.dealer.canDrawPlayingCard(playerPointValue)) {
       this.dealer.deal(this.dealerShoe, this.dealer);
     }
