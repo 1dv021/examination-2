@@ -12,11 +12,8 @@
 
 // console.log(cat.bark(); // WHAT HAVE WE WROUGHT
 
-const dealer = require('./src/dealer');
+const DEALER = require('./src/dealer');
 
-let arr = [0, 1, 2, 3, 4, 5];
+const dealer = DEALER.createDealer();
 
-let shuffledArr = dealer.shuffle(arr);
-
-console.log(shuffledArr);
-console.log(arr);
+console.log(dealer);

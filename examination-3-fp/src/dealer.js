@@ -4,7 +4,20 @@
 
 'use strict';
 
-module.exports.shuffle = shuffle;
+module.exports = {
+  createDealer,
+  shuffle
+};
+
+/**
+ * 
+ */
+function createDealer() {
+  return {
+    nickName: 'Dealer',
+    hand: {}
+  };
+}
 
 /**
  * Returns a copy of the array with the elements randomized.
