@@ -17,11 +17,10 @@ const createDeck = (numberOfDecks = 1) => {
   let deck = [];
 
   for (let i = 0; i < numberOfDecks; i++) {
-    let pc = createPlayingCards();
-    deck = deck.concat(pc);
+    deck = deck.concat(createPlayingCards());
   }
 
-  return Object.freeze(deck);
+  return deck;
 };
 
 /**
@@ -32,11 +31,10 @@ const createPlayingCards = () => {
   const NUMBER_OF_SUITS = Object.keys(Suits).length;
 
   let playingCards = [];
-  let suit;
 
   // Suits
   for (let i = 0; i < NUMBER_OF_SUITS; i++) {
-    suit = Suits[Object.keys(Suits)[i]];
+    let suit = Suits[Object.keys(Suits)[i]];
 
     // Ranks
     for (let j = 0; j < NUMBER_OF_RANKS; j++) {
@@ -44,7 +42,7 @@ const createPlayingCards = () => {
     }
   }
 
-  return Object.freeze(playingCards);
+  return playingCards;
 };
 
 /**
@@ -60,23 +58,9 @@ const createPlayingCard = (rank, suit) => {
   });
 };
 
-const getPlayingCardValuePointSum = (playingCards) => {
-  // Ace one point!
-  let sum = playingCards.reduce((sum, x) => sum + x.rank, 0);
-
-  // Ace 1 or 14 points!
-  let numberOfAces = playingCards.filter(x => x.rank === Ranks.ACE).length;
-  while (numberOfAces-- > 0 && sum + 13 < 21) {
-    sum += 13;
-  }
-
-  return sum;
-};
-
 // Exports
 module.exports = {
   createDeck,
   createPlayingCards,
-  createPlayingCard,
-  getPlayingCardValuePointSum
+  createPlayingCard
 };

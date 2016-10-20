@@ -12,8 +12,8 @@ let player;
  * @returns {string}
  */
 const calculateScore = () => {
-  let dealerHandValue = dealer.hand.value();
-  let playerHandValue = player.hand.value();
+  let dealerHandValue = dealer.hand.getValue();
+  let playerHandValue = player.hand.getValue();
   let score = [player.toString(), dealer.toString(), dealer.nickName];
 
   if (playerHandValue > 21) {
@@ -54,8 +54,8 @@ const playRound = () => {
     player.hand.add(dealer.nextCard());
   }
 
-  if (player.hand.value() < 21 && player.hand.count() < 5) {
-    while (dealer.canHit(player.hand.value())) {
+  if (player.hand.getValue() < 21 && player.hand.getCount() < 5) {
+    while (dealer.canHit(player.hand.getValue())) {
       dealer.hand.add(dealer.nextCard());
     }
   }

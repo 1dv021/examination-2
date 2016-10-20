@@ -7,7 +7,7 @@
 
 'use strict';
 
-const cardMaker = require('./cardMaker');
+const Ranks = require('./Ranks');
 const util = require('./util');
 
 /**
@@ -16,22 +16,22 @@ const util = require('./util');
  * @returns {Object}
  */
 const createDealer = (playingCards) => {
-  const nickName = 'Dealer';
-  let dealersShoe = [...playingCards];
-  let discardPeal = [];
-  let hand = Object.freeze(createHand());
+  let nickName = 'Dealer';
+  let drawPile = [...playingCards];
+  let discardPile = [];
+  let hand = createHand();
 
   return {
-    canHit: (hitLimit) => hand.count() < 2 || hand.value() < hitLimit,
+    canHit: (hitLimit) => hand.getCount() < 2 || hand.getValue() < hitLimit,
     hand,
-    nextCard: () => dealersShoe.shift(),
+    nextCard: () => drawPile.shift(),
     nickName,
-    reuseDiscardedPlayingCards: () => {
-      dealersShoe = [...dealersShoe, discardPeal];
-      discardPeal = [];
+    reuseDiscardPile: () => {
+      drawPile = [...drawPile, discardPile];
+      discardPile = [];
     },
-    shuffle: () => dealersShoe = util.shuffle(dealersShoe),
-    toString: () => `${nickName}: ${hand.count() > 0 ? hand.toString() : '-'}`
+    shuffle: () => drawPile = util.shuffle(drawPile),
+    toString: () => `${nickName}: ${hand.getCount() > 0 ? hand.toString() : '-'}`
   };
 };
 
@@ -40,14 +40,14 @@ const createDealer = (playingCards) => {
  * 
  * @returns {Object}
  */
-const createPlayer = (hitLimit = 8) => {
-  const nickName = 'Player #1';
-  let hand = Object.freeze(createHand());
+const createPlayer = (id = 1, hitLimit = 8) => {
+  let nickName = Number.isInteger(id) ? `Player #${id}` : id;
+  let hand = createHand();
 
   return {
     nickName,
     hand,
-    canHit: () => hand.count() < 2 || hand.value() <= hitLimit,
+    canHit: () => hand.getCount() < 2 || hand.getValue() <= hitLimit,
     toString: () => `${nickName}: ${hand.toString()}`
   };
 };
@@ -58,18 +58,27 @@ const createPlayer = (hitLimit = 8) => {
  * @returns {Object}
  */
 const createHand = () => {
-  let playingCards = Object.freeze([]);
+  let playingCards = [];
+
+  const getValue = () => {
+    // Ace one point!
+    let sum = playingCards.reduce((sum, x) => sum + x.rank, 0);
+
+    // Ace 1 or 14 points!
+    let numberOfAces = playingCards.filter(x => x.rank === Ranks.ACE).length;
+    while (numberOfAces-- > 0 && sum + 13 < 21) {
+      sum += 13;
+    }
+
+    return sum;
+  };
 
   return {
-    add: (playingCard) => playingCards = Object.freeze([...playingCards, playingCard]),
-    count: () => playingCards.length,
-    discard: () => {
-      let discardedPlayingCards = playingCards;
-      playingCards = Object.freeze([]);
-      return discardedPlayingCards;
-    },
-    value: () => cardMaker.getPlayingCardValuePointSum(playingCards),
-    toString: () => `${playingCards.join(' ')} (${cardMaker.getPlayingCardValuePointSum(playingCards)})`
+    add: (playingCard) => playingCards = [...playingCards, playingCard],
+    getCount: () => playingCards.length,
+    discard: () => playingCards.splice(0),
+    getValue,
+    toString: () => `${playingCards.join(' ')} (${getValue()})`
   };
 };
 
