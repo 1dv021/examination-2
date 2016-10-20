@@ -1,23 +1,15 @@
-/*
- * 
+/**
+ * Module for utility functions.
+ *
+ * @author Mats Loock
+ * @version 1.0.0
  */
 
 'use strict';
 
 module.exports = {
-  createDealer,
   shuffle
 };
-
-/**
- * 
- */
-function createDealer() {
-  return {
-    nickName: 'Dealer',
-    hand: {}
-  };
-}
 
 /**
  * Returns a copy of the array with the elements randomized.
@@ -41,3 +33,4 @@ function shuffle(arr) {
 
   return arr;
 }
+
