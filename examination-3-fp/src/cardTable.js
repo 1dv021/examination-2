@@ -21,45 +21,117 @@ const createDealer = (playingCards) => {
   let discardPile = [];
   let hand = createHand();
 
+  /**
+   * Inidicates if the dealer can hit.
+   *
+   * @returns {boolean}
+   */
+  const canHit = (hitLimit) => hand.getCount() < 2 || hand.getValue() < hitLimit;
+
+  /**
+   * Returns the top card of the draw pile.
+   *
+   * @returns {Object} 
+   */
+  const drawCard = () => {
+    // If only one card left in the draw pile reuse the cards in the discard pile.
+    if (drawPile.length === 1) {
+      drawPile = drawPile.concat(discardPile.splice(0));
+      drawPile = util.shuffle(drawPile);
+    }
+
+    return drawPile.shift();
+  };
+
+  /**
+   * Adds cards to the discard pile.
+   *
+   * @param {Object[]} playingCards
+   */
+  const addToDiscardPile = (playingCards) => discardPile = discardPile.concat(playingCards);
+
+  /**
+   * Shuffles the cards of the draw pile. 
+   */
+  const shuffle = () => drawPile = util.shuffle(drawPile);
+
+  /**
+   * Returns a string representing the object.
+   */
+  const toString = () => `${nickName}: ${hand.getCount() > 0 ? hand.toString() : '-'}`;
+
   return {
-    canHit: (hitLimit) => hand.getCount() < 2 || hand.getValue() < hitLimit,
+    canHit,
     hand,
-    nextCard: () => drawPile.shift(),
+    drawCard,
     nickName,
-    reuseDiscardPile: () => {
-      drawPile = [...drawPile, discardPile];
-      discardPile = [];
-    },
-    shuffle: () => drawPile = util.shuffle(drawPile),
-    toString: () => `${nickName}: ${hand.getCount() > 0 ? hand.toString() : '-'}`
+    addToDiscardPile,
+    shuffle,
+    toString
   };
 };
 
 /**
  * Creates a new player.
- * 
+ *
  * @returns {Object}
  */
 const createPlayer = (id = 1, hitLimit = 8) => {
   let nickName = Number.isInteger(id) ? `Player #${id}` : id;
   let hand = createHand();
 
+  /**
+   * Inidicates if the player can hit.
+   *
+   * @returns {boolean}
+   */
+  const canHit = () => hand.getCount() < 2 || hand.getValue() <= hitLimit;
+
+  /**
+   * Returns a string representing the object.
+   *
+   * @returns {string}
+   */
+  const toString = () => `${nickName}: ${hand.getCount() > 0 ? hand.toString() : '-'}`;
+
   return {
     nickName,
     hand,
-    canHit: () => hand.getCount() < 2 || hand.getValue() <= hitLimit,
-    toString: () => `${nickName}: ${hand.toString()}`
+    canHit,
+    toString
   };
 };
 
 /**
  * Creates a new hand.
- * 
+ *
  * @returns {Object}
  */
 const createHand = () => {
   let playingCards = [];
 
+  /**
+   * Adds a card to the hand.
+   */
+  const add = (playingCard) => playingCards = [...playingCards, playingCard];
+
+  /**
+   * Discards all cards.
+   *
+   * @returns {Object[]}
+   */
+  const discard = () => playingCards.splice(0);
+
+  /**
+   * Returns the number of cards.
+   */
+  const getCount =  () => playingCards.length;
+
+  /**
+   * Returns the hand's value.
+   *
+   * @returns {number}
+   */
   const getValue = () => {
     // Ace one point!
     let sum = playingCards.reduce((sum, x) => sum + x.rank, 0);
@@ -73,17 +145,25 @@ const createHand = () => {
     return sum;
   };
 
+  /**
+   * Returns a string representing the object.
+   *
+   * @returns {string}
+   */
+  const toString = () => `${playingCards.join(' ')} (${getValue()})`;
+
   return {
-    add: (playingCard) => playingCards = [...playingCards, playingCard],
-    getCount: () => playingCards.length,
-    discard: () => playingCards.splice(0),
+    add,
+    getCount,
+    discard,
     getValue,
-    toString: () => `${playingCards.join(' ')} (${getValue()})`
+    toString
   };
 };
 
 // Exports.
 module.exports = {
   createDealer,
-  createPlayer
+  createPlayer,
+  createHand
 };

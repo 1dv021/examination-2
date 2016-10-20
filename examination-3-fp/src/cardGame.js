@@ -3,15 +3,14 @@
 const cardMaker = require('./cardMaker');
 const cardTable = require('./cardTable');
 
-let dealer;
-let player;
-
 /**
- * Calculates the score (after a finished round).
+ * Calculates the score.
  *
+ * @param {Object} dealer
+ * @param {Object} player
  * @returns {string}
  */
-const calculateScore = () => {
+const calculateScore = (dealer, player) => {
   let dealerHandValue = dealer.hand.getValue();
   let playerHandValue = player.hand.getValue();
   let score = [player.toString(), dealer.toString(), dealer.nickName];
@@ -34,36 +33,56 @@ const calculateScore = () => {
 };
 
 /**
- * Initializes a new round. 
+ * The dealer plays a player.
+ *
+ * @param {Object} dealer
+ * @param {Object} player
  */
-const init = () => {
-  const playingCards = cardMaker.createDeck();
-  dealer = cardTable.createDealer(playingCards);
-  dealer.shuffle();
-
-  player = cardTable.createPlayer();
-};
-
-/**
- * Plays a round.
- */
-const playRound = () => {
-  player.hand.add(dealer.nextCard());
-
+const playTurn = (dealer, player) => {
   while (player.canHit()) {
-    player.hand.add(dealer.nextCard());
+    player.hand.add(dealer.drawCard());
   }
 
   if (player.hand.getValue() < 21 && player.hand.getCount() < 5) {
     while (dealer.canHit(player.hand.getValue())) {
-      dealer.hand.add(dealer.nextCard());
+      dealer.hand.add(dealer.drawCard());
     }
   }
+};
+
+/**
+ * Plays a new round.
+ *
+ * @param {number} [numberOfPlayers = 1]
+ * @returns {string}
+ */
+const playRound = (numberOfPlayers = 1) => {
+  const result = [];
+  const playingCards = cardMaker.createDeck();
+  const dealer = cardTable.createDealer(playingCards);
+  dealer.shuffle();
+
+  let players = [];
+
+  for (let i = 1; i <= numberOfPlayers; i++) {
+    let player = cardTable.createPlayer(i);
+    player.hand.add(dealer.drawCard());
+    players.push(player);
+  }
+
+  for (let player of players) {
+    playTurn(dealer, player);
+    result.push(calculateScore(dealer, player));
+    let cards = [...player.hand.discard(), ...dealer.hand.discard()];
+    dealer.addToDiscardPile(cards);
+  }
+
+  return result;
 };
 
 // Exports
 module.exports = {
   calculateScore,
-  init,
-  playRound
+  playRound,
+  playTurn
 };

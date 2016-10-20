@@ -11,7 +11,10 @@ const Ranks = require('./Ranks');
 const Suits = require('./Suits');
 
 /**
- * @returns {object[]}
+ * Creates a deck of playing cards.
+ *
+ * @param {number} [numberOfDecks = 1]
+ * @returns {Object[]}
  */
 const createDeck = (numberOfDecks = 1) => {
   let deck = [];
@@ -24,7 +27,26 @@ const createDeck = (numberOfDecks = 1) => {
 };
 
 /**
- * @returns {object[]}
+ * Creates a playing card.
+ *
+ * @param {Rank} rank
+ * @param {Suit} suit
+ * @returns {Object}
+ */
+const createPlayingCard = (rank, suit) => {
+  let text = (rank === 1 || rank > 10 ? (Object.keys(Ranks)[rank - 1]).substr(0, 1) : rank) + suit;
+
+  return Object.freeze({
+    rank,
+    suit,
+    toString: () => text
+  });
+};
+
+/**
+ * Creates 52 playing cards.
+ *
+ * @returns {Object[]}
  */
 const createPlayingCards = () => {
   const NUMBER_OF_RANKS = Object.keys(Ranks).length;
@@ -43,19 +65,6 @@ const createPlayingCards = () => {
   }
 
   return playingCards;
-};
-
-/**
- * @returns {object}
- */
-const createPlayingCard = (rank, suit) => {
-  let text = (rank === 1 || rank > 10 ? (Object.keys(Ranks)[rank - 1]).substr(0, 1) : rank) + suit;
-
-  return Object.freeze({
-    rank,
-    suit,
-    toString: () => text
-  });
 };
 
 // Exports
