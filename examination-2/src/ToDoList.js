@@ -95,6 +95,15 @@ class ToDoList {
     if (!Array.isArray(value)) {
       throw new TypeError('The value must be an array.');
     }
+
+    if (!value.every(x => x instanceof ToDoItem)) {
+      throw new TypeError('The array must only contain references to instances of ToDoItem.');
+    }
+
+    this._toDoItems = value
+      .map(x => x.clone())
+      .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
+
     // const array = [];
     // for (let item of value) {
     //   if (!(item instanceof ToDoItem)) {
@@ -104,13 +113,6 @@ class ToDoList {
     // }
     // array.sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
     // this._toDoItems = array;
-
-    this._toDoItems = value.map(x => {
-      if (!(x instanceof ToDoItem)) {
-        throw new TypeError('The array must only contain references to instances of ToDoItem.');
-      }
-      return x.clone();
-    }).sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
   }
 
   /**
@@ -118,7 +120,8 @@ class ToDoList {
    * @returns {boolean}
    */
   get hasOverdue() {
-    return this._toDoItems.filter(x => x.isOverdue).length > 0;
+    // return this._toDoItems.filter(x => x.isOverdue).length > 0;
+    return this._toDoItems.find(x => x.isOverdue) !== undefined;
   }
 
   /**
