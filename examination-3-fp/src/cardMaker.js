@@ -34,12 +34,20 @@ const createDeck = (numberOfDecks = 1) => {
  * @returns {Object}
  */
 const createPlayingCard = (rank, suit) => {
-  let text = (rank === 1 || rank > 10 ? (Object.keys(Ranks)[rank - 1]).substr(0, 1) : rank) + suit;
+
+  /**
+   * Returns a string representing the object.
+   *
+   * @returns {string}
+   */
+  const toString = () => {
+    return (rank === 1 || rank > 10 ? (Object.keys(Ranks)[rank - 1]).substr(0, 1) : rank) + suit;
+  };
 
   return Object.freeze({
     rank,
     suit,
-    toString: () => text
+    toString
   });
 };
 
