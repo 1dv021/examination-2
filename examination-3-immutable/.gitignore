@@ -1,0 +1,11 @@
+# Dependency directory
+node_modules/
+
+# WebStorm
+.idea/
+
+# OSX folder options
+.DS_Store
+
+# Visual Studio Code
+.vscode
