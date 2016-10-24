@@ -1,3 +1,10 @@
+/**
+ * Module for card game functions.
+ *
+ * @author Mats Loock
+ * @version 1.0.0
+ */
+
 'use strict';
 
 const cardMaker = require('./cardMaker');
@@ -11,9 +18,9 @@ const cardTable = require('./cardTable');
  * @returns {string}
  */
 const calculateScore = (dealer, player) => {
-  let dealerHandValue = dealer.hand().value();
-  let playerHandValue = player.hand().value();
-  let score = [player.toString(), dealer.toString(), dealer.nickName()];
+  let dealerHandValue = dealer.getHand().getValue();
+  let playerHandValue = player.getHand().getValue();
+  let score = [player.toString(), dealer.toString(), dealer.getNickName()];
 
   if (playerHandValue > 21) {
     score[0] += ' BUSTED!';
@@ -24,7 +31,7 @@ const calculateScore = (dealer, player) => {
   if (playerHandValue === 21 ||
     dealerHandValue > 21 ||
     playerHandValue < 21 && playerHandValue > dealerHandValue) {
-    score[2] = player.nickName();
+    score[2] = player.getNickName();
   }
 
   score[2] += ' win!';
@@ -40,12 +47,12 @@ const calculateScore = (dealer, player) => {
  */
 const playTurn = (dealer, player) => {
   while (player.canHit()) {
-    player.hand().add(dealer.drawCard());
+    player.getHand().add(dealer.drawCard());
   }
 
-  if (player.hand().value() < 21 && player.hand().count() < 5) {
-    while (dealer.canHit(player.hand().value())) {
-      dealer.hand().add(dealer.drawCard());
+  if (player.getHand().getValue() < 21 && player.getHand().getCount() < 5) {
+    while (dealer.canHit(player.getHand().getValue())) {
+      dealer.getHand().add(dealer.drawCard());
     }
   }
 };
@@ -66,15 +73,15 @@ const playRound = (numberOfPlayers = 1) => {
 
   for (let i = 1; i <= numberOfPlayers; i++) {
     let player = cardTable.createPlayer(i);
-    player.hand().add(dealer.drawCard());
+    player.getHand().add(dealer.drawCard());
     players.push(player);
   }
 
   for (let player of players) {
     playTurn(dealer, player);
     result.push(calculateScore(dealer, player));
-    let cards = [...player.hand().discard(), ...dealer.hand().discard()];
-    dealer.addToDiscardPile(cards);
+    let cards = [...player.getHand().discard(), ...dealer.getHand().discard()];
+    dealer.throwIntoDiscardPile(cards);
   }
 
   return result;

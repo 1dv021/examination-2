@@ -8,7 +8,7 @@
 'use strict';
 
 const Ranks = require('./Ranks');
-const util = require('./util');
+const utils = require('./utils');
 
 /**
  * Creates a new dealer.
@@ -22,11 +22,21 @@ const createDealer = (playingCards) => {
   let _nickName = 'Dealer';
 
   /**
+   * Gets the hand.
+   */
+  const getHand = () => _hand;
+
+  /**
+   * Gets the nick name.
+   */
+  const getNickName = () => _nickName;
+
+  /**
    * Inidicates if the dealer can hit.
    *
    * @returns {boolean}
    */
-  const canHit = (hitLimit) => _hand.count() < 2 || _hand.value() < hitLimit;
+  const canHit = (hitLimit) => _hand.getCount() < 2 || _hand.getValue() < hitLimit;
 
   /**
    * Returns the top card of the draw pile.
@@ -37,36 +47,38 @@ const createDealer = (playingCards) => {
     // If only one card left in the draw pile reuse the cards in the discard pile.
     if (_drawPile.length === 1) {
       _drawPile = _drawPile.concat(_discardPile.splice(0));
-      _drawPile = util.shuffle(_drawPile);
+      _drawPile = utils.shuffle(_drawPile);
     }
 
     return _drawPile.shift();
   };
 
   /**
+   * Shuffles the cards of the draw pile. 
+   */
+  const shuffle = () => _drawPile = utils.shuffle(_drawPile);
+
+  /**
    * Adds cards to the discard pile.
    *
    * @param {Object[]} playingCards
    */
-  const addToDiscardPile = (playingCards) => _discardPile = _discardPile.concat(playingCards);
-
-  /**
-   * Shuffles the cards of the draw pile. 
-   */
-  const shuffle = () => _drawPile = util.shuffle(_drawPile);
+  const throwIntoDiscardPile = (playingCards) =>
+    _discardPile = _discardPile.concat(playingCards);
 
   /**
    * Returns a string representing the object.
    */
-  const toString = () => `${_nickName}: ${_hand.count() > 0 ? _hand.toString() : '-'}`;
+  const toString = () => `${_nickName}: ${_hand.getCount() > 0 ?
+    _hand.toString() : '-'}`;
 
   return {
-    hand: () => _hand,
-    nickName: () => _nickName,
-    addToDiscardPile,
     canHit,
     drawCard,
+    getHand,
+    getNickName,
     shuffle,
+    throwIntoDiscardPile,
     toString
   };
 };
@@ -85,19 +97,29 @@ const createPlayer = (id = 1, hitLimit = 8) => {
    *
    * @returns {boolean}
    */
-  const canHit = () => _hand.count() < 2 || _hand.value() <= hitLimit;
+  const canHit = () => _hand.getCount() < 2 || _hand.getValue() <= hitLimit;
+
+  /**
+   * Gets the hand.
+   */
+  const getHand = () => _hand;
+
+  /**
+   * Gets the nick name.
+   */
+  const getNickName = () => _nickName;
 
   /**
    * Returns a string representing the object.
    *
    * @returns {string}
    */
-  const toString = () => `${_nickName}: ${_hand.count() > 0 ? _hand.toString() : '-'}`;
+  const toString = () => `${_nickName}: ${_hand.getCount() > 0 ? _hand.toString() : '-'}`;
 
   return {
-    nickName: () => _nickName,
-    hand: () => _hand,
     canHit,
+    getHand,
+    getNickName,
     toString
   };
 };
@@ -127,26 +149,26 @@ const createHand = () => {
    *
    * @returns {number}
    */
-  const count =  () => _playingCards.length;
+  const getCount =  () => _playingCards.length;
 
   /**
    * Returns the playing cards.
    *
    * @returns {Object[]}
    */
-  const playingCards =  () => [..._playingCards];
+  const getPlayingCards =  () => [..._playingCards];
 
   /**
    * Returns the hand's value.
    *
    * @returns {number}
    */
-  const value = () => {
+  const getValue = () => {
     // Compute the hand value where each ace is one point...
-    let sum = _playingCards.reduce((sum, x) => sum + x.rank, 0);
+    let sum = _playingCards.reduce((sum, x) => sum + x.getRank(), 0);
 
     // ...and count exach ace as 14 point as long as the hand value i less than 21.
-    let numberOfAces = _playingCards.filter(x => x.rank === Ranks.ACE).length;
+    let numberOfAces = _playingCards.filter(x => x.getRank() === Ranks.ACE).length;
     while (numberOfAces-- > 0 && sum + 13 < 21) {
       sum += 13;
     }
@@ -159,14 +181,14 @@ const createHand = () => {
    *
    * @returns {string}
    */
-  const toString = () => `${_playingCards.join(' ')} (${value()})`;
+  const toString = () => `${_playingCards.join(' ')} (${getValue()})`;
 
   return {
     add,
     discard,
-    count,
-    playingCards,
-    value,
+    getCount,
+    getPlayingCards,
+    getValue,
     toString
   };
 };

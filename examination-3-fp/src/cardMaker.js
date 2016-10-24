@@ -36,6 +36,16 @@ const createDeck = (numberOfDecks = 1) => {
 const createPlayingCard = (rank, suit) => {
 
   /**
+   * Gets theh rank.
+   */
+  const getRank = () => rank;
+
+  /**
+   * Gets theh suit.
+   */
+  const getSuit = () => suit;
+
+  /**
    * Returns a string representing the object.
    *
    * @returns {string}
@@ -45,8 +55,8 @@ const createPlayingCard = (rank, suit) => {
   };
 
   return Object.freeze({
-    rank,
-    suit,
+    getRank,
+    getSuit,
     toString
   });
 };
@@ -78,6 +88,6 @@ const createPlayingCards = () => {
 // Exports
 module.exports = {
   createDeck,
-  createPlayingCards,
-  createPlayingCard
+  createPlayingCard,
+  createPlayingCards
 };
