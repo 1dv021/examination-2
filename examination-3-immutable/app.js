@@ -20,9 +20,3 @@ let hand = cardHand
 
 console.log(hand);
 console.log(hand.toString());
-
-for (let s of Object.keys(Suits)) {
-  for (let r of Object.keys(Ranks)) {
-    console.log(cardMaker.createPlayingCard(Ranks[r], Suits[s]));
-  }
-}
