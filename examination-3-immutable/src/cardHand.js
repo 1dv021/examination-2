@@ -66,6 +66,8 @@ const createHand = (playingCards = []) => {
  *
  * @returns {number}
  */
+
+
 const getValue = (playingCards) => {
   // Compute the hand value where each ace is one point...
   let handValue = playingCards.reduce((sum, x) => sum + x.rank, 0);
