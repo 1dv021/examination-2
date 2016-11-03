@@ -42,9 +42,9 @@ console.log(drawPile.toString());
 
 let hand = handMaker.createPlayingHand();
 
-let result = drawPile.draw();
+let result = drawPile.draw(2);
 
-hand = hand.add(result.cards);
+hand = hand.add(result.playingCards);
 drawPile = result.drawPile;
 
 console.log(hand.toString());

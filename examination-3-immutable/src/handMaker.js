@@ -26,15 +26,19 @@ const Ranks = require('./cardMaker').Ranks;
  * 
  * @type {{toJSON: protoPlayingCard.toJSON, toString: protoPlayingCard.toString}}
  */
-const playingHandProto = {
+const playingHandPrototype = {
   /**
-   * Returns a copy of the hand with a playing card added to it.
+   * Returns a copy of the hand with one or more playing cards added to it.
    *
-   * @param {PlayingCard} playingCard
+   * @param {PlayingCard|PlayingCard[]} playingCards
    * @returns {Hand}
    */
-  add: function(playingCard) {
-    return createPlayingHand([...this.playingCards, playingCard]);
+  add: function(playingCards) {
+    if (typeof playingCards[Symbol.iterator] !== 'function') {
+      playingCards = [playingCards];
+    }
+
+    return createPlayingHand([...this.playingCards, ...playingCards]);
   },
 
   /**
@@ -82,7 +86,7 @@ const playingHandProto = {
  * @returns {Hand}
  */
 const createPlayingHand = (playingCards = []) =>
-  Object.create(playingHandProto, {
+  Object.create(playingHandPrototype, {
     'count': {
       enumerable: true,
       value: playingCards.length

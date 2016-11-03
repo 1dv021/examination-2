@@ -46,16 +46,18 @@ const Suits = Object.freeze({
  * A playing card.
  *
  * @typedef {Object} PlayingCard
- * @property {Rank} rank - The playing card's rank.
- * @property {Suit} suit - The playing card's suit.
+ * @property {Ranks} rank - The playing card's rank.
+ * @property {Suits} suit - The playing card's suit.
  * @property {function} toJSON - Returns an object to stringify.
  * @property {function} toString - Returns a string representing the object.
  */
 
 /**
- * @type {{toJSON: protoPlayingCard.toJSON, toString: protoPlayingCard.toString}}
+ * The playingCardPrototype represents the prototype of the PlayingCard object.
+ *
+ * @type {{toJSON: playingCardPrototype.toJSON, toString: playingCardPrototype.toString}}
  */
-const playingCardProto = {
+const playingCardPrototype = {
   /**
    * Returns an object to stringify.
    *
@@ -72,7 +74,7 @@ const playingCardProto = {
   /**
    * Returns a string representing the object.
    *
-   * @returns {string} 
+   * @returns {string}
    */
   toString: function() {
     return (this.rank > 10 ?
@@ -85,12 +87,12 @@ const playingCardProto = {
 /**
  * Creats a new playing card.
  *
- * @param {Rank} rank
- * @param {Suit} suit
+ * @param {Ranks} rank
+ * @param {Suits} suit
  * @returns {PlayingCard}
  */
 const createPlayingCard = (rank, suit) =>
-  Object.create(playingCardProto, {
+  Object.create(playingCardPrototype, {
     'rank': {
       enumerable: true,
       configurable: false,
@@ -125,7 +127,7 @@ const createPlayingCards = () => {
 /**
  * A draw pile of playing cards.
  *
- * @typedef {Object} Deck
+ * @typedef {Object} DrawPile
  * @property {number} count - The number of playing cards the draw pile consists of.
  * @property {PlayingCard[]} playingCards - The draw pile's playing cards.
  * @property {function} combine - Returns a copy of the draw pile, combined with the additional playing cards.
@@ -136,14 +138,16 @@ const createPlayingCards = () => {
  */
 
 /**
- * 
+ * The drawPilePrototype represents the prototype of the DrawPile object.
+ *
+ * @type {{combine: drawPilePrototype.combine, draw: drawPilePrototype.draw, shuffle: drawPilePrototype.shuffle, toJSON: drawPilePrototype.toJSON, toString: drawPilePrototype.toString}}
  */
 const drawPilePrototype = {
   /**
    * Returns a copy of the draw pile, combined with the additional playing cards.
    *
    * @param {PlayingCard[]} playingCards
-   * @returns {Deck}
+   * @returns {DrawPile}
    */
   combine: function(playingCards) {
     return createDrawPile([...this.playingCards, playingCards]);
@@ -169,7 +173,7 @@ const drawPilePrototype = {
   /**
    * Returns a copy of the draw pile, with shuffled playing cards.
    *
-   * @returns {Deck}
+   * @returns {DrawPile}
    */
   shuffle: function() {
     return createDrawPile(utils.shuffle(this.playingCards));
@@ -187,7 +191,7 @@ const drawPilePrototype = {
   /**
    * Returns a string representing the object.
    *
-   * @returns {string} 
+   * @returns {string}
    */
   toString: function() {
     return this.playingCards.join(' ');
@@ -214,7 +218,6 @@ const createDrawPile = (playingCards = createPlayingCards()) => {
   });
 };
 
-
 // Exports
 module.exports = {
   createDrawPile,
@@ -223,7 +226,6 @@ module.exports = {
   Ranks,
   Suits,
 };
-
 
 // /**
 //  * Creates a playing card.
