@@ -7,7 +7,6 @@
 
 'use strict';
 
-// const cardMaker = require('./src/cardMaker');
 const Ranks = require('./cardMaker').Ranks;
 
 /**
@@ -23,10 +22,11 @@ const Ranks = require('./cardMaker').Ranks;
  */
 
 /**
- * 
- * @type {{toJSON: protoPlayingCard.toJSON, toString: protoPlayingCard.toString}}
+ * The handPrototype represents the prototype of the Hand object.
+ *
+ * @type {{add: handPrototype.add, discard: handPrototype.discard, toJSON: handPrototype.toJSON, toString: handPrototype.toString}}
  */
-const playingHandPrototype = {
+const handPrototype = {
   /**
    * Returns a copy of the hand with one or more playing cards added to it.
    *
@@ -38,7 +38,7 @@ const playingHandPrototype = {
       playingCards = [playingCards];
     }
 
-    return createPlayingHand([...this.playingCards, ...playingCards]);
+    return createHand([...this.playingCards, ...playingCards]);
   },
 
   /**
@@ -51,13 +51,13 @@ const playingHandPrototype = {
     let remaningPlayingCards = this.playingCards.filter(pc =>
         !playingCardsToDiscard.find(pctd => pctd === pc));
 
-    return createPlayingHand(remaningPlayingCards);
+    return createHand(remaningPlayingCards);
   },
 
   /**
    * Returns an object to stringify.
    *
-   * @returns {{count: {number}, playingCards: {PlayingCards[]}, value: {number}}}
+   * @returns {{count: {number}, playingCards: {PlayingCard[]}, value: {number}}}
    */
   toJSON: function() {
     return {
@@ -80,27 +80,26 @@ const playingHandPrototype = {
 };
 
 /**
- * Creats a new playing hand.
+ * Creats a new hand.
  *
  * @param {PlayingCard[]} playingCards
  * @returns {Hand}
  */
-const createPlayingHand = (playingCards = []) =>
-  Object.create(playingHandPrototype, {
+const createHand = (playingCards = []) =>
+  Object.freeze(Object.create(handPrototype, {
     'count': {
       enumerable: true,
       value: playingCards.length
     },
     'playingCards': {
       enumerable: true,
-      value: [...playingCards]
+      value: Object.freeze([...playingCards])
     },
     'value': {
       enumerable: true,
-      configurable: true,
-      value: get21Value(playingCards)
+      value: getValue(playingCards)
     }
-  });
+  }));
 
 /**
  * Returns the hand's value, the sum of the ranks.
@@ -109,16 +108,6 @@ const createPlayingHand = (playingCards = []) =>
  */
 const getValue = (playingCards) => {
   // Compute the hand value where each ace is 14 points.
-  return playingCards.reduce((sum, x) => sum + x.rank, 0);
-};
-
-/**
- * Returns the hand's value.
- *
- * @returns {number}
- */
-const get21Value = (playingCards) => {
-  // Compute the hand value where each ace is 14 points...
   let handValue = playingCards.reduce((sum, x) => sum + x.rank, 0);
 
   // ...and count exach ace as one point as long as the hand value i greater than 21.
@@ -132,6 +121,6 @@ const get21Value = (playingCards) => {
 
 // Exports
 module.exports = {
-  createPlayingHand,
+  createHand,
   getValue
 };
