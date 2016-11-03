@@ -92,20 +92,17 @@ const playingCardPrototype = {
  * @returns {PlayingCard}
  */
 const createPlayingCard = (rank, suit) =>
-  Object.create(playingCardPrototype, {
+  Object.freeze(Object.create(playingCardPrototype, {
     'rank': {
       enumerable: true,
-      configurable: false,
-      writable: false,
       value: rank
     },
+
     'suit': {
       enumerable: true,
-      configurable: false,
-      writable: false,
       value: suit
     }
-  });
+  }));
 
 /**
  * Creates 52 playing cards.
@@ -113,15 +110,17 @@ const createPlayingCard = (rank, suit) =>
  * @returns {PlayingCard[]}
  */
 const createPlayingCards = () => {
-  let playingCards = [];
+  let playingCards =
+    new Array(Object.keys(Suits).length * Object.keys(Ranks).length);
+  let i = 0;
 
   for (let suitKey of Object.keys(Suits)) {
     for (let rankKey of Object.keys(Ranks)) {
-      playingCards.push(createPlayingCard(Ranks[rankKey], Suits[suitKey]));
+      playingCards[i++] = createPlayingCard(Ranks[rankKey], Suits[suitKey]);
     }
   }
 
-  return playingCards;
+  return Object.freeze(playingCards);
 };
 
 /**
@@ -204,8 +203,8 @@ const drawPilePrototype = {
  * @param {PlayingCard[]} [playingCards = createPlayingCards()]
  * @returns {DrawPile}
  */
-const createDrawPile = (playingCards = createPlayingCards()) => {
-  return Object.create(drawPilePrototype, {
+const createDrawPile = (playingCards = createPlayingCards()) =>
+  Object.freeze(Object.create(drawPilePrototype, {
     'count': {
       enumerable: true,
       value: playingCards.length
@@ -213,10 +212,9 @@ const createDrawPile = (playingCards = createPlayingCards()) => {
 
     'playingCards': {
       enumerable: true,
-      value: [...playingCards]
+      value: Object.freeze([...playingCards])
     }
-  });
-};
+  }));
 
 // Exports
 module.exports = {
