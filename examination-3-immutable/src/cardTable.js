@@ -9,34 +9,17 @@
 
 const Ranks = require('./Ranks');
 const utils = require('./utils');
+const cardHand = require('./src/cardHand');
 
 /**
  * Creates a new dealer.
  *
  * @returns {Object}
  */
-const createDealer = (playingCards) => {
-  let _discardPile = [];
-  let _drawPile = [...playingCards];
-  let _hand = createHand();
-  let _nickName = 'Dealer';
-
-  /**
-   * Gets the hand.
-   */
-  const getHand = () => _hand;
-
-  /**
-   * Gets the nick name.
-   */
-  const getNickName = () => _nickName;
-
-  /**
-   * Inidicates if the dealer can hit.
-   *
-   * @returns {boolean}
-   */
-  const canHit = (hitLimit) => _hand.getCount() < 2 || _hand.getValue() < hitLimit;
+const createDealer = (playingCards, discardPile = [], hand = cardHand.createHand(), nickName = 'Dealer') => {
+  let _discardPile = Object.freeze([...discardPile]);
+  let _drawPile = Object.freeze([...playingCards]);
+  let _hand = Object.freeze(hand);
 
   /**
    * Returns the top card of the draw pile.
@@ -66,17 +49,11 @@ const createDealer = (playingCards) => {
   const throwIntoDiscardPile = (playingCards) =>
     _discardPile = _discardPile.concat(playingCards);
 
-  /**
-   * Returns a string representing the object.
-   */
-  const toString = () => `${_nickName}: ${_hand.getCount() > 0 ?
-    _hand.toString() : '-'}`;
-
   return {
-    canHit,
+    hand: _hand,
+    nickName,
+    canHit: (hitLimit) => canHit(_hand, hitLimit),
     drawCard,
-    getHand,
-    getNickName,
     shuffle,
     throwIntoDiscardPile,
     toString
@@ -117,12 +94,25 @@ const createPlayer = (id = 1, hitLimit = 8) => {
   const toString = () => `${_nickName}: ${_hand.getCount() > 0 ? _hand.toString() : '-'}`;
 
   return {
-    canHit,
+    canHit: (hitLimit) => canHit(_hand, hitLimit),
     getHand,
     getNickName,
     toString
   };
 };
+
+/**
+ * Inidicates if the hand can hit.
+ *
+ * @returns {boolean}
+ */
+const canHit = (hand, hitLimit) => hand.getCount() < 2 || hand.getValue() < hitLimit;
+
+/**
+ * Returns a string representing the object.
+ */
+const toString = () => `${nickName}: ${_hand.getCount() > 0 ?
+    _hand.toString() : '-'}`;
 
 
 // Exports.

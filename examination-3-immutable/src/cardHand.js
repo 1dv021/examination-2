@@ -25,7 +25,7 @@ const utils = require('./utils');
  * Creates a new hand.
  *
  * @param {PlayingCard[]} playingCards
- *  @returns {Hand}
+ * @returns {Hand}
  */
 const createHand = (playingCards = []) => {
 
@@ -41,25 +41,18 @@ const createHand = (playingCards = []) => {
     count: _playingCards.length,
     playingCards: _playingCards,
     value: getValue(_playingCards),
-
-    /**
-     * Returns a copy of the hand with a playing card added to it.
-     *
-     * @param {PlayingCard} playingCard
-     * @returns {Hand}
-     */
-    add: (playingCard) => createHand(utils.add(_playingCards, playingCard)),
-
-    /**
-     * Returns a string representing the object.
-     *
-     * @returns {string}
-     */
-    toString: () => _playingCards.length > 0 ?
-      `${_playingCards.join(' ')} (${getValue(_playingCards)})` :
-      '-'
+    add: (playingCard) => add(_playingCards, playingCard),
+    toString: () => toString(_playingCards)
   });
 };
+
+/**
+ * Returns a copy of the hand with a playing card added to it.
+ *
+ * @param {PlayingCard} playingCard
+ * @returns {Hand}
+ */
+const add = (playingCards, playingCard) => createHand(utils.add(playingCards, playingCard));
 
 /**
  * Returns the hand's value.
@@ -72,13 +65,22 @@ const getValue = (playingCards) => {
 
   // ...and count exach ace as 14 point as long as the hand value i less than 21.
   let numberOfAces = playingCards.
-    filter(x => x.rank === Ranks.ACE).length;
+  filter(x => x.rank === Ranks.ACE).length;
   while (numberOfAces-- > 0 && handValue + 13 < 21) {
     handValue += 13;
   }
 
   return handValue;
 };
+
+/**
+ * Returns a string representing the object.
+ *
+ * @returns {string}
+ */
+const toString = (playingCards) => playingCards.length > 0 ?
+  `${playingCards.join(' ')} (${getValue(playingCards)})` :
+  '-';
 
 // Exports.
 module.exports = {
