@@ -7,9 +7,7 @@
 
 'use strict';
 
-const cardMaker = require('./cardMaker');
 const handMaker = require('./handMaker');
-const utils = require('./utils');
 
 /**
  * A participant at the card table.
@@ -17,9 +15,9 @@ const utils = require('./utils');
  * @typedef {Object} Participant
  * @property {string} nickName - The participant's nick name.
  * @property {Hand} hand - The particpant's hand.
- * @property {function} draw - Adds a playing card to the participant's hand.
- * @property {function} discard - Discards one or more playing cards of the participant's hand.
- * @property {function} discardAll - Discards all playing cards of the pariticpant's hand.
+ * @property {function} add - Returns a copy of the participant where the playing card has been added to the hand.
+ * @property {function} discard - Returns a copy of the participant where  one or more playing cards has been discared of the hand.
+ * @property {function} discardAll - Returns a copy of the participant where all playing cards has been discared of the hand.
  * @property {function} toJSON - Returns an object to stringify.
  * @property {function} toString - Returns a string representing the object.
  */
@@ -30,14 +28,24 @@ const utils = require('./utils');
  */
 const participantPrototype = {
   /**
-   * 
+   * Returns a copy of the participant where the playing card has been added to the hand.
+   *
+   * @param {PlayingCard} playingCard
+   * @returns {Participant}
    */
-  draw: function(playingCard) {
+  add: function(playingCard) {
     return createParticipant(this.nickName, this.hand.add(playingCard));
   },
 
+  canHit: function(limit = 8) {
+    return this.hand.value < limit && this.hand.count < 5
+  },
+
   /**
-   * 
+   * Returns a copy of the participant where  one or more playing cards has been discared of the hand.
+   *
+   * @param {PlayingCard} playingCardsToDiscard
+   * @returns {Participant}
    */
   discard: function(playingCardsToDiscard) {
     return createParticipant(this.nickName,
@@ -45,7 +53,9 @@ const participantPrototype = {
   },
 
   /**
-   * 
+   * Returns a copy of the participant where all playing cards has been discared of the hand.
+   *
+   * @returns {Participant}
    */
   discardAll: function() {
     return createParticipant(this.nickName);
@@ -78,10 +88,10 @@ const participantPrototype = {
  *
  * @param {string} nickName
  * @param {Hand} hand
- * @returns {Object}
+ * @returns {Participant}
  */
-const createParticipant = (nickName, hand = handMaker.createPlayingHand()) =>
-  Object.create(participantPrototype, {
+const createParticipant = (nickName, hand = handMaker.createHand()) =>
+  Object.freeze(Object.create(participantPrototype, {
     'hand': {
       enumerable: true,
       value: hand
@@ -91,7 +101,7 @@ const createParticipant = (nickName, hand = handMaker.createPlayingHand()) =>
       enumerable: true,
       value: nickName
     }
-  });
+  }));
 
 /**
  * A dealer at the card table.
@@ -110,40 +120,81 @@ const createParticipant = (nickName, hand = handMaker.createPlayingHand()) =>
  * 
  */
 const dealerPrototype = {
-  deal: function() {
+  /**
+   * Returns a copy of the dealer where the playing card has been added to the hand.
+   *
+   * @param {PlayingCard} playingCard
+   * @returns {Dealer}
+   */
+  add: function(playingCard) {
+    return createDealer(this.drawPile, this.discardPile,
+      this.nickName, this.hand.add(playingCard));
+  },
+
+  canHit: function(limit) {
+    return this.hand.value < limit && this.hand.count < 5
+  },
+
+  collectDiscardedPlayingCards: function(discradedPlayingCards) {
+    return createDealer(this.drawPile, 
+      [...this.discardPile, ...discradedPlayingCards],
+      this.nickName, this.hand);
+  },
+
+  deal: function(count = 1) {
+
+    let drawPile = this.drawPile;
+    let discardPile = this.discardPile;
+
     // If only one card left in the draw pile reuse the cards in the discard pile.
-    if (this.drawPile.length === 1) {
-      this.drawPile =  utils.shuffle(
-        this.drawPile.concat(this.discardPile.splice(0)));
+    if (drawPile.count === 1) {
+      drawPile = drawPile.combine(discardPile);
+      discardPile = [];
     }
 
-    return this.drawPile.shift();
+    let result = drawPile.draw(count);
+
+    return {
+      playingCards: result.playingCards,
+      dealer: promoteToDealer(createParticipant(this.nickName, this.hand),
+        result.drawPile.shuffle(), discardPile)
+    }
+  },
+
+  /**
+   * Returns a copy of the participant where all playing cards has been discared of the hand.
+   *
+   * @returns {Dealer}
+   */
+  discardAll: function() {
+    return createDealer(this.drawPile, this.discardPile, this.nickName);
   },
 
   shuffle: function() {
-    this.drawPile = utils.shuffle(this.drawPile);
+    return promoteToDealer(createParticipant(this.nickName, this.hand),
+      this.drawPile.shuffle(), this.discardPile);
   },
 };
 
 /**
  * 
  */
-const promoteToDealer = (participant, playingCards, discardPile = []) => {
+const promoteToDealer = (participant, drawPile, discardPile = []) => {
 
   Object.setPrototypeOf(dealerPrototype, participantPrototype);
   let dealer = Object.create(dealerPrototype, {
     'discardPile': {
       enumerable: true,
-      value: discardPile
+      value: Object.freeze([...discardPile])
     },
 
     'drawPile': {
       enumerable: true,
-      value: [...playingCards]
+      value: drawPile
     }
   });
 
-  return Object.assign(dealer, participant);
+  return Object.freeze(Object.assign(dealer, participant));
 };
 
 /**
@@ -152,8 +203,22 @@ const promoteToDealer = (participant, playingCards, discardPile = []) => {
 const demoteFromDealer = (participant) =>
   createParticipant(participant.nickName, participant.hand);
 
+/**
+ * Creats a new dealer.
+ *
+ * @param {DrawPile} drawPile
+ * @param {PlayingCard[]} [discardPile = []]]
+ * @param {string} [nickName = 'Dealer']
+ * @param {Hand} [hand = handMaker.createHand()] 
+ * @returns {Dealer}
+ */
+const createDealer = (drawPile, discardPile = [], nickName = 'Dealer',
+  hand = handMaker.createHand()) =>
+  promoteToDealer(createParticipant(nickName, hand), drawPile, discardPile);
+
 // Exports
 module.exports = {
+  createDealer,
   createParticipant,
   promoteToDealer,
   demoteFromDealer
