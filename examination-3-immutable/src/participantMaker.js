@@ -37,8 +37,8 @@ const participantPrototype = {
     return createParticipant(this.nickName, this.hand.add(playingCard));
   },
 
-  canHit: function(limit = 8) {
-    return this.hand.value < limit && this.hand.count < 5
+  canHit: function(limit = 14) {
+    return this.hand.value < limit && this.hand.count < 5;
   },
 
   /**
@@ -129,10 +129,6 @@ const dealerPrototype = {
   add: function(playingCard) {
     return createDealer(this.drawPile, this.discardPile,
       this.nickName, this.hand.add(playingCard));
-  },
-
-  canHit: function(limit) {
-    return this.hand.value < limit && this.hand.count < 5
   },
 
   collectDiscardedPlayingCards: function(discradedPlayingCards) {

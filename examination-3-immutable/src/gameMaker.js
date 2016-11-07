@@ -66,8 +66,8 @@ const gamePrototype = {
 
     // If the player hasn't won, the dealer draws
     // cards until the dealer stands.
-    if (player.hand.value < 21 || player.hand.count < 5) {
-      while (dealer.canHit(player.hand.value)) {
+    if (player.hand.value < 21 && player.hand.count < 5) {
+      while (dealer.canHit()) {
         result = dealer.deal();
         dealer = result.dealer;
         dealer = dealer.add(result.playingCards);
