@@ -222,7 +222,7 @@ module.exports = {
   createPlayingCard,
   createPlayingCards,
   Ranks,
-  Suits,
+  Suits
 };
 
 // /**

@@ -70,7 +70,7 @@ const handPrototype = {
   /**
    * Returns a string representing the object.
    *
-   * @returns {string} 
+   * @returns {string}
    */
   toString: function() {
     return this.count > 0 ?

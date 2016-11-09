@@ -16,6 +16,7 @@ const handMaker = require('./handMaker');
  * @property {string} nickName - The participant's nick name.
  * @property {Hand} hand - The particpant's hand.
  * @property {function} add - Returns a copy of the participant where the playing card has been added to the hand.
+ * @property {function} canHit - ...
  * @property {function} discard - Returns a copy of the participant where  one or more playing cards has been discared of the hand.
  * @property {function} discardAll - Returns a copy of the participant where all playing cards has been discared of the hand.
  * @property {function} toJSON - Returns an object to stringify.
@@ -23,8 +24,9 @@ const handMaker = require('./handMaker');
  */
 
 /**
- * 
- * @type {{toJSON: protoPlayingCard.toJSON, toString: protoPlayingCard.toString}}
+ * ...
+ *
+ * @type {{add: participantPrototype.add, canHit: participantPrototype.canHit, discard: participantPrototype.discard, discardAll: participantPrototype.discardAll, toJSON: participantPrototype.toJSON, toString: participantPrototype.toString}}
  */
 const participantPrototype = {
   /**
@@ -37,14 +39,20 @@ const participantPrototype = {
     return createParticipant(this.nickName, this.hand.add(playingCard));
   },
 
-  canHit: function(limit = 14) {
-    return this.hand.value < limit && this.hand.count < 5;
+  /**
+   * ...
+   *
+   * @param {number} standValue
+   * @returns {boolean}
+   */
+  canHit: function(standValue = 14) {
+    return this.hand.value <= standValue && this.hand.count < 5;
   },
 
   /**
-   * Returns a copy of the participant where  one or more playing cards has been discared of the hand.
+   * Returns a copy of the participant where  one or more playing cards has been discarded of the hand.
    *
-   * @param {PlayingCard} playingCardsToDiscard
+   * @param {PlayingCard[]} playingCardsToDiscard
    * @returns {Participant}
    */
   discard: function(playingCardsToDiscard) {
@@ -76,7 +84,7 @@ const participantPrototype = {
   /**
    * Returns a string representing the object.
    *
-   * @returns {string} 
+   * @returns {string}
    */
   toString: function() {
     return `${this.nickName}: ${this.hand}`;
@@ -84,7 +92,7 @@ const participantPrototype = {
 };
 
 /**
- * Creats a new participant.
+ * Creates a new participant.
  *
  * @param {string} nickName
  * @param {Hand} hand
@@ -117,7 +125,8 @@ const createParticipant = (nickName, hand = handMaker.createHand()) =>
  */
 
 /**
- * 
+ *
+ * @type {{add: dealerPrototype.add, collectDiscardedPlayingCards: dealerPrototype.collectDiscardedPlayingCards, deal: dealerPrototype.deal, discardAll: dealerPrototype.discardAll, shuffle: dealerPrototype.shuffle}}
  */
 const dealerPrototype = {
   /**
@@ -131,12 +140,24 @@ const dealerPrototype = {
       this.nickName, this.hand.add(playingCard));
   },
 
-  collectDiscardedPlayingCards: function(discradedPlayingCards) {
-    return createDealer(this.drawPile, 
-      [...this.discardPile, ...discradedPlayingCards],
+  /**
+   * ...
+   *
+   * @param {PlayingCard[]}discardedPlayingCards
+   * @returns {Dealer}
+   */
+  collectDiscardedPlayingCards: function(discardedPlayingCards) {
+    return createDealer(this.drawPile,
+      [...this.discardPile, ...discardedPlayingCards],
       this.nickName, this.hand);
   },
 
+  /**
+   * ...
+   *
+   * @param {number} count
+   * @returns {{playingCards: (*|handPrototype.playingCards|{enumerable, value}|drawPilePrototype.playingCards|PlayingCard[]), dealer}}
+   */
   deal: function(count = 1) {
 
     let drawPile = this.drawPile;
@@ -154,7 +175,7 @@ const dealerPrototype = {
       playingCards: result.playingCards,
       dealer: promoteToDealer(createParticipant(this.nickName, this.hand),
         result.drawPile.shuffle(), discardPile)
-    }
+    };
   },
 
   /**
@@ -166,14 +187,23 @@ const dealerPrototype = {
     return createDealer(this.drawPile, this.discardPile, this.nickName);
   },
 
+  /**
+   *
+   * @returns {Dealer}
+   */
   shuffle: function() {
-    return promoteToDealer(createParticipant(this.nickName, this.hand),
-      this.drawPile.shuffle(), this.discardPile);
+    return createDealer(this.drawPile.shuffle(), this.discardPile,
+      this.nickName, this.hand);
   },
 };
 
 /**
- * 
+ * ...
+ *
+ * @param {Participant} participant
+ * @param {DrawPile} drawPile
+ * @param {PlayingCard[]} discardPile
+ * @returns {Dealer}
  */
 const promoteToDealer = (participant, drawPile, discardPile = []) => {
 
@@ -194,7 +224,9 @@ const promoteToDealer = (participant, drawPile, discardPile = []) => {
 };
 
 /**
- * 
+ * ...
+ *
+ * @param {Participant} participant
  */
 const demoteFromDealer = (participant) =>
   createParticipant(participant.nickName, participant.hand);
@@ -205,7 +237,7 @@ const demoteFromDealer = (participant) =>
  * @param {DrawPile} drawPile
  * @param {PlayingCard[]} [discardPile = []]]
  * @param {string} [nickName = 'Dealer']
- * @param {Hand} [hand = handMaker.createHand()] 
+ * @param {Hand} [hand = handMaker.createHand()]
  * @returns {Dealer}
  */
 const createDealer = (drawPile, discardPile = [], nickName = 'Dealer',
