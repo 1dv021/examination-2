@@ -40,7 +40,7 @@ const participantPrototype = {
   },
 
   /**
-   * ...
+   * Returns a value indicating whether the participant can hit or not.
    *
    * @param {number} standValue
    * @returns {boolean}
@@ -61,7 +61,7 @@ const participantPrototype = {
   },
 
   /**
-   * Returns a copy of the participant where all playing cards has been discared of the hand.
+   * Returns a copy of the participant where all playing cards has been discarded of the hand.
    *
    * @returns {Participant}
    */

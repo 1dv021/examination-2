@@ -47,17 +47,17 @@ const handPrototype = {
    * @returns {Hand}
    */
   discard: function(playingCardsToDiscard) {
-    // Filter the remaning playing cards.
-    let remaningPlayingCards = this.playingCards.filter(pc =>
+    // Filter the remaining playing cards.
+    let remainingPlayingCards = this.playingCards.filter(pc =>
         !playingCardsToDiscard.find(pctd => pctd === pc));
 
-    return createHand(remaningPlayingCards);
+    return createHand(remainingPlayingCards);
   },
 
   /**
    * Returns an object to stringify.
    *
-   * @returns {{count: {number}, playingCards: {PlayingCard[]}, value: {number}}}
+   * @returns {{count: number, playingCards: PlayingCard[], value: number}}
    */
   toJSON: function() {
     return {
