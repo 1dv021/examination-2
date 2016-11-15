@@ -1,7 +1,7 @@
 # EditorConfig helps developers define and maintain consistent
 # coding styles between different editors and IDEs
 # editorconfig.org
-# Do not exlude this file in your .gitignore
+# Do not exclude this file in your .gitignore
 
 root = true
 
