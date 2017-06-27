@@ -16,6 +16,8 @@ let players = [
   participantMaker.createParticipant('Player #1'),
   participantMaker.createParticipant('Player #2'),
   participantMaker.createParticipant('Player #3'),
+  participantMaker.createParticipant('Player #4'),
+  participantMaker.createParticipant('Player #5'),
 ];
 let game = gameMaker.createGame(dealer, players);
 
