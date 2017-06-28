@@ -22,18 +22,18 @@ function descriptiveStatistics (numbers) {
   let result = {}
 
   if (numbers.length === 1) {
-    result.max = numbers[0]
+    result.maximum = numbers[0]
     result.mean = numbers[0]
     result.median = numbers[0]
-    result.min = numbers[0]
+    result.minimum = numbers[0]
     result.mode = [numbers[0]]
     result.range = 0
     result.standardDeviation = 0
   } else {
-    result.max = maximum(numbers)
+    result.maximum = maximum(numbers)
     result.mean = mean(numbers)
     result.median = median(numbers)
-    result.min = minimum(numbers)
+    result.minimum = minimum(numbers)
     result.mode = mode(numbers)
     result.range = range(numbers)
     result.standardDeviation = standardDeviation(numbers)
