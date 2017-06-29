@@ -186,19 +186,19 @@ function standardDeviation (numbers) {
 }
 
 /**
- * Throws an exception.
+ * Returns an exception.
  * @throws {TypeError}
  */
 const notAnArray = () => new TypeError('The passed argument is not an array.')
 
 /**
- * Throws an exception.
+ * Returns an exception.
  * @throws {Error}
  */
 const noElements = () => new Error('The passed array contains no elements.')
 
 /**
- * Throws an exception.
+ * Returns an exception.
  * @throws {TypeError}
  */
 const notJustNumbers = () => new TypeError('The passed array contains not just numbers.')
