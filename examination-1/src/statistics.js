@@ -12,12 +12,15 @@
  * mode, range and standard deviation) from a set of numbers.
  *
  * @param {number[]} numbers The set of data to be analyzed.
- * @throws {TypeError} Argument must be an array.
- * @throws {Error} Argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {{maximum: number, mean: number, median: number, minimum: number, mode: number[], range: number, standardDeviation: number}}
  */
 function descriptiveStatistics (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   let result = {}
 
@@ -46,10 +49,15 @@ function descriptiveStatistics (numbers) {
  * Computes the maximum from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number}
  */
 function maximum (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   return Math.max(...numbers)
 }
@@ -58,10 +66,15 @@ function maximum (numbers) {
  * Computes the mean from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number}
  */
 function mean (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   return numbers.reduce((sum, n) => sum + n, 0) / numbers.length
 }
@@ -70,10 +83,15 @@ function mean (numbers) {
  * Computes the median from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number}
  */
 function median (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   let copy = numbers.slice(0).sort((a, b) => a - b)
   let middle = Math.floor(copy.length / 2)
@@ -85,10 +103,15 @@ function median (numbers) {
  * Computes the minimum from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number}
  */
 function minimum (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   return Math.min(...numbers)
 }
@@ -97,10 +120,15 @@ function minimum (numbers) {
  * Computes the mode from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number[]}
  */
 function mode (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   let frequency = {}
   let maxFrequency = 0
@@ -126,10 +154,15 @@ function mode (numbers) {
  * Computes the range from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number}
  */
 function range (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   return maximum(numbers) - minimum(numbers)
 }
@@ -138,33 +171,37 @@ function range (numbers) {
  * Computes the standard deviation from a set of numbers.
  *
  * @param {number[]} numbers
+ * @throws {TypeError} The argument must be an array.
+ * @throws {Error} The argument can not be an empty array.
+ * @throws {TypeError} The argument must be an array containing just numbers.
  * @returns {number}
  */
 function standardDeviation (numbers) {
-  validate(numbers)
+  if (!Array.isArray(numbers)) throw notAnArray()
+  if (numbers.length === 0) throw noElements()
+  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
 
   let meanValue = mean(numbers)
   return Math.sqrt(numbers.reduce((sum, n) => sum + Math.pow(n - meanValue, 2), 0) / numbers.length)
 }
 
 /**
- * Throws an exception if the array doesn't meets the requirements.
- *
- * @param {number[]} numbers
+ * Throws an exception.
+ * @throws {TypeError}
  */
-function validate (numbers) {
-  if (!Array.isArray(numbers)) {
-    throw new TypeError('The passed argument is not an array.')
-  }
+const notAnArray = () => new TypeError('The passed argument is not an array.')
 
-  if (numbers.length === 0) {
-    throw new Error('The array contains no elements.')
-  }
+/**
+ * Throws an exception.
+ * @throws {Error}
+ */
+const noElements = () => new Error('The passed array contains no elements.')
 
-  if (numbers.some(n => typeof n !== 'number')) {
-    throw new TypeError('The passed array contains not just numbers.')
-  }
-}
+/**
+ * Throws an exception.
+ * @throws {TypeError}
+ */
+const notJustNumbers = () => new TypeError('The passed array contains not just numbers.')
 
 // Exports
 exports.descriptiveStatistics = descriptiveStatistics
