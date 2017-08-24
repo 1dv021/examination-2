@@ -34,7 +34,7 @@ const calculateScore = (dealer, player) => {
     score[2] = player.getNickName();
   }
 
-  score[2] += ' win!';
+  score[2] += ' wins!';
 
   return score.join('\n');
 };
