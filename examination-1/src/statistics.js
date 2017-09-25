@@ -20,7 +20,7 @@
 function descriptiveStatistics (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   let result = {}
 
@@ -57,7 +57,7 @@ function descriptiveStatistics (numbers) {
 function maximum (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   return Math.max(...numbers)
 }
@@ -74,7 +74,7 @@ function maximum (numbers) {
 function mean (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   return numbers.reduce((sum, n) => sum + n, 0) / numbers.length
 }
@@ -91,7 +91,7 @@ function mean (numbers) {
 function median (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   let copy = numbers.slice(0).sort((a, b) => a - b)
   let middle = Math.floor(copy.length / 2)
@@ -111,7 +111,7 @@ function median (numbers) {
 function minimum (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   return Math.min(...numbers)
 }
@@ -128,7 +128,7 @@ function minimum (numbers) {
 function mode (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   let frequency = {}
   let maxFrequency = 0
@@ -162,7 +162,7 @@ function mode (numbers) {
 function range (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   return maximum(numbers) - minimum(numbers)
 }
@@ -179,7 +179,7 @@ function range (numbers) {
 function standardDeviation (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(Number.isNaN())) throw notJustNumbers()
 
   let meanValue = mean(numbers)
   return Math.sqrt(numbers.reduce((sum, n) => sum + Math.pow(n - meanValue, 2), 0) / numbers.length)
