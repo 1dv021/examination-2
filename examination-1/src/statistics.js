@@ -20,7 +20,7 @@
 function descriptiveStatistics (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   let result = {}
 
@@ -57,7 +57,7 @@ function descriptiveStatistics (numbers) {
 function maximum (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   return Math.max(...numbers)
 }
@@ -74,7 +74,7 @@ function maximum (numbers) {
 function mean (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   return numbers.reduce((sum, n) => sum + n, 0) / numbers.length
 }
@@ -91,7 +91,7 @@ function mean (numbers) {
 function median (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   let copy = numbers.slice(0).sort((a, b) => a - b)
   let middle = Math.floor(copy.length / 2)
@@ -111,7 +111,7 @@ function median (numbers) {
 function minimum (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   return Math.min(...numbers)
 }
@@ -128,7 +128,7 @@ function minimum (numbers) {
 function mode (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   let frequency = {}
   let maxFrequency = 0
@@ -162,7 +162,7 @@ function mode (numbers) {
 function range (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   return maximum(numbers) - minimum(numbers)
 }
@@ -179,27 +179,38 @@ function range (numbers) {
 function standardDeviation (numbers) {
   if (!Array.isArray(numbers)) throw notAnArray()
   if (numbers.length === 0) throw noElements()
-  if (numbers.some(n => typeof n !== 'number')) throw notJustNumbers()
+  if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
   let meanValue = mean(numbers)
   return Math.sqrt(numbers.reduce((sum, n) => sum + Math.pow(n - meanValue, 2), 0) / numbers.length)
 }
 
 /**
+ * Determines whether the passed value is a number.
+ *
+ * @param {*} value The value to be checked.
+ * @returns {boolean} true if the object is a number; otherwise, false.
+ */
+const isNumber = value => typeof value === 'number'
+
+/**
  * Returns an exception.
- * @throws {TypeError}
+ *
+ * @returns {TypeError}
  */
 const notAnArray = () => new TypeError('The passed argument is not an array.')
 
 /**
  * Returns an exception.
- * @throws {Error}
+ *
+ * @returns {Error}
  */
 const noElements = () => new Error('The passed array contains no elements.')
 
 /**
  * Returns an exception.
- * @throws {TypeError}
+ *
+ * @returns {TypeError}
  */
 const notJustNumbers = () => new TypeError('The passed array contains not just numbers.')
 
