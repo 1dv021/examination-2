@@ -13,34 +13,34 @@ const expect = require('chai').expect
 // ------------------------------------------------------------------ maximum
 describe('maximum', () => {
   // exceptions
-  it(`maximum(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('maximum(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.maximum(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`maximum([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('maximum([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.maximum([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`maximum([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('maximum([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.maximum([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('maximum([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.maximum(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.maximum(arg)
     expect(res).to.be.an('number')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -61,34 +61,34 @@ describe('maximum', () => {
 // ------------------------------------------------------------------ mean
 describe('mean', () => {
   // exceptions
-  it(`mean(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('mean(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.mean(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`mean([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('mean([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.mean([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`mean([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('mean([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.mean([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('mean([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.mean(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.mean(arg)
     expect(res).to.be.an('number')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -109,34 +109,34 @@ describe('mean', () => {
 // ------------------------------------------------------------------ median
 describe('median', () => {
   // exceptions
-  it(`median(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('median(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.median(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`median([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('median([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.median([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`median([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('median([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.median([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('median([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.median(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.median(arg)
     expect(res).to.be.an('number')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -157,34 +157,34 @@ describe('median', () => {
 // ------------------------------------------------------------------ minimum
 describe('minimum', () => {
   // exceptions
-  it(`minimum(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('minimum(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.minimum(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`minimum([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('minimum([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.minimum([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`minimum([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('minimum([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.minimum([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('minimum([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.minimum(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.minimum(arg)
     expect(res).to.be.an('number')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -205,34 +205,34 @@ describe('minimum', () => {
 // ------------------------------------------------------------------ mode
 describe('mode', () => {
   // exceptions
-  it(`mode(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('mode(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.mode(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`mode([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('mode([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.mode([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`mode([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('mode([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.mode([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('mode([4, 2, 6, 1, 3, 7, 5, 3]) should return an array and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.mode(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.mode(arg)
     expect(res).to.be.an('array')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -273,34 +273,34 @@ describe('mode', () => {
 // ------------------------------------------------------------------ range
 describe('range', () => {
   // exceptions
-  it(`range(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('range(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.range(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`range([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('range([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.range([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`range([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('range([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.range([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('range([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.range(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.range(arg)
     expect(res).to.be.an('number')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -321,34 +321,34 @@ describe('range', () => {
 // ------------------------------------------------------------------ standardDeviation
 describe('standardDeviation', () => {
   // exceptions
-  it(`standardDeviation(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('standardDeviation(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.standardDeviation(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`standardDeviation([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('standardDeviation([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.standardDeviation([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`standardDeviation([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('standardDeviation([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.standardDeviation([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('standardDeviation([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.standardDeviation(arg)
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.standardDeviation(arg)
     expect(res).to.be.an('number')
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
@@ -369,35 +369,35 @@ describe('standardDeviation', () => {
 // ------------------------------------------------------------------ descriptiveStatistics
 describe('descriptiveStatistics', () => {
   // exceptions
-  it(`descriptiveStatistics(null) should throw TypeError with the custom message 'The passed argument is not an array.'`, done => {
+  it('descriptiveStatistics(null) should throw TypeError with the custom message \'The passed argument is not an array.\'', done => {
     expect(() => {
       statistics.descriptiveStatistics(null)
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed argument is not an array.')
+      .to.have.property('message', 'The passed argument is not an array.')
     done()
   })
 
-  it(`descriptiveStatistics([]) should throw Error with the custom message 'The passed array contains no elements.'`, done => {
+  it('descriptiveStatistics([]) should throw Error with the custom message \'The passed array contains no elements.\'', done => {
     expect(() => {
       statistics.descriptiveStatistics([])
     }).to.throw(Error).and
-    .to.have.property('message', 'The passed array contains no elements.')
+      .to.have.property('message', 'The passed array contains no elements.')
     done()
   })
 
-  it(`descriptiveStatistics([1, 2, 3, '4']) should throw TypeError with the custom message 'The passed array contains not just numbers.'`, done => {
+  it('descriptiveStatistics([1, 2, 3, \'4\']) should throw TypeError with the custom message \'The passed array contains not just numbers.\'', done => {
     expect(() => {
       statistics.descriptiveStatistics([1, 2, 3, '4'])
     }).to.throw(TypeError).and
-    .to.have.property('message', 'The passed array contains not just numbers.')
+      .to.have.property('message', 'The passed array contains not just numbers.')
     done()
   })
 
   // no effect on the argument
   it('descriptiveStatistics([4, 2, 6, 1, 3, 7, 5, 3]) should return a number and not modify the argument', done => {
-    let arg = [4, 2, 6, 1, 3, 7, 5, 3]
-    let res = statistics.descriptiveStatistics(arg)
-    expect(res).to.be.an('object').that.includes({maximum: 7})
+    const arg = [4, 2, 6, 1, 3, 7, 5, 3]
+    const res = statistics.descriptiveStatistics(arg)
+    expect(res).to.be.an('object').that.includes({ maximum: 7 })
     expect(arg).to.eql([4, 2, 6, 1, 3, 7, 5, 3])
     done()
   })

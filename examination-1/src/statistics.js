@@ -22,7 +22,7 @@ function descriptiveStatistics (numbers) {
   if (numbers.length === 0) throw noElements()
   if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
-  let result = {}
+  const result = {}
 
   if (numbers.length === 1) {
     result.maximum = numbers[0]
@@ -59,7 +59,8 @@ function maximum (numbers) {
   if (numbers.length === 0) throw noElements()
   if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
-  return Math.max(...numbers)
+  // Math.max(...numbers) is unsafe if the array has to many elements
+  return numbers.reduce((a, b) => Math.max(a, b))
 }
 
 /**
@@ -93,8 +94,8 @@ function median (numbers) {
   if (numbers.length === 0) throw noElements()
   if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
-  let copy = numbers.slice(0).sort((a, b) => a - b)
-  let middle = Math.floor(copy.length / 2)
+  const copy = numbers.slice(0).sort((a, b) => a - b)
+  const middle = Math.floor(copy.length / 2)
 
   return copy.length % 2 !== 0 ? copy[middle] : (copy[middle] + copy[middle - 1]) / 2
 }
@@ -113,7 +114,8 @@ function minimum (numbers) {
   if (numbers.length === 0) throw noElements()
   if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
-  return Math.min(...numbers)
+  // Math.min(...numbers) is unsafe if the array has to many elements
+  return numbers.reduce((a, b) => Math.min(a, b))
 }
 
 /**
@@ -130,12 +132,12 @@ function mode (numbers) {
   if (numbers.length === 0) throw noElements()
   if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
-  let frequency = {}
+  const frequency = {}
   let maxFrequency = 0
 
   // Compute the mode by determine the frequency of each value, and
   // the count of the most frequent value.
-  for (let value of numbers) {
+  for (const value of numbers) {
     frequency[value] = (frequency[value] || 0) + 1
     if (frequency[value] > maxFrequency) {
       maxFrequency = frequency[value]
@@ -181,7 +183,7 @@ function standardDeviation (numbers) {
   if (numbers.length === 0) throw noElements()
   if (numbers.some(n => !isNumber(n))) throw notJustNumbers()
 
-  let meanValue = mean(numbers)
+  const meanValue = mean(numbers)
   return Math.sqrt(numbers.reduce((sum, n) => sum + Math.pow(n - meanValue, 2), 0) / numbers.length)
 }
 
@@ -189,9 +191,9 @@ function standardDeviation (numbers) {
  * Determines whether the passed value is a number.
  *
  * @param {*} value The value to be checked.
- * @returns {boolean} true if the object is a number; otherwise, false.
+ * @returns {boolean} true if the object is a number and is not a Number.NaN; otherwise, false.
  */
-const isNumber = value => typeof value === 'number'
+const isNumber = value => typeof value === 'number' && !Number.isNaN(value)
 
 /**
  * Returns an exception.
@@ -215,11 +217,11 @@ const noElements = () => new Error('The passed array contains no elements.')
 const notJustNumbers = () => new TypeError('The passed array contains not just numbers.')
 
 // Exports
-exports.descriptiveStatistics = descriptiveStatistics
-exports.maximum = maximum
-exports.mean = mean
-exports.median = median
-exports.minimum = minimum
-exports.mode = mode
-exports.range = range
-exports.standardDeviation = standardDeviation
+module.exports.descriptiveStatistics = descriptiveStatistics
+module.exports.maximum = maximum
+module.exports.mean = mean
+module.exports.median = median
+module.exports.minimum = minimum
+module.exports.mode = mode
+module.exports.range = range
+module.exports.standardDeviation = standardDeviation

@@ -9,8 +9,14 @@
 
 const game = require('./src/game')
 
-let results = game.playRound(10)
+let numberOfPlayers = Number.parseInt(process.argv[2])
+if (Number.isNaN(numberOfPlayers) || numberOfPlayers < 1 || numberOfPlayers > 40) {
+  console.log('--- Defaults to 7 players ---')
+  numberOfPlayers = 7
+}
 
-for (let result of results) {
+const results = game.playRound(numberOfPlayers)
+
+for (const result of results) {
   console.log(result, '\n')
 }

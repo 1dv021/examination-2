@@ -22,9 +22,9 @@ const Suits = require('./Suits')
  * @returns {string}
  */
 function calculateScore (dealer, player) {
-  let dealerHandValue = dealer.handValue
-  let playerHandValue = player.handValue
-  let score = [player.toString(), dealer.toString(), dealer.nickName]
+  const dealerHandValue = dealer.handValue
+  const playerHandValue = player.handValue
+  const score = [player.toString(), dealer.toString(), dealer.nickName]
 
   if (playerHandValue > 21) {
     score[0] += ' BUSTED!'
@@ -49,11 +49,11 @@ function calculateScore (dealer, player) {
  * @returns {PlayingCard[]}
  */
 function createPlayingCards () {
-  let playingCards = new Array(Object.keys(Suits).length * Object.keys(Ranks).length)
+  const playingCards = new Array(Object.keys(Suits).length * Object.keys(Ranks).length)
   let i = 0
 
-  for (let suitKey of Object.keys(Suits)) {
-    for (let rankKey of Object.keys(Ranks)) {
+  for (const suitKey of Object.keys(Suits)) {
+    for (const rankKey of Object.keys(Ranks)) {
       playingCards[i++] = new PlayingCard(Ranks[rankKey], Suits[suitKey])
     }
   }
@@ -91,18 +91,18 @@ function playRound (numberOfPlayers = 1) {
   const dealer = new Dealer(playingCardsPile.createDrawPile(playingCards))
   dealer.shuffle()
 
-  let players = []
+  const players = []
 
   for (let i = 1; i <= numberOfPlayers; i++) {
-    let player = new Player(`Player #${i}`)
+    const player = new Player(`Player #${i}`)
     player.addToHand(dealer.deal())
     players.push(player)
   }
 
-  for (let player of players) {
+  for (const player of players) {
     playTurn(dealer, player)
     result.push(calculateScore(dealer, player))
-    let cards = [...player.discardHand(), ...dealer.discardHand()]
+    const cards = [...player.discardHand(), ...dealer.discardHand()]
     dealer.collectDiscardedPlayingCards(cards)
   }
 

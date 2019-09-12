@@ -26,8 +26,8 @@ class Dealer extends Player {
    * @param {Hand} [hand = new Hand()]
    */
   constructor (drawPile,
-               discardPile = playingCardsPile.createDiscardPile(),
-               nickName = 'Dealer', standValue = 18, hand = new Hand()) {
+    discardPile = playingCardsPile.createDiscardPile(),
+    nickName = 'Dealer', standValue = 18, hand = new Hand()) {
     super(nickName, standValue, hand)
 
     /**
@@ -66,7 +66,6 @@ class Dealer extends Player {
    */
   deal (count = 1) {
     // If only one card left in the draw pile reuse the cards in the discard pile.
-    console.log(this._drawPile.count)
     if (this._drawPile.count() === 1) {
       this._drawPile.add(this._discardPile.removeAll())
       this.shuffle()

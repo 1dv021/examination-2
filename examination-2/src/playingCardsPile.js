@@ -34,7 +34,7 @@ const discardPilePrototype = {
    * @returns {Object}
    */
   copy: function () {
-    let discardPile = createDiscardPile()
+    const discardPile = createDiscardPile()
     discardPile.add(this._playingCards)
     return discardPile
   },
@@ -68,7 +68,7 @@ function createDiscardPile () {
     /**
      * PlayingCard[]
      */
-    '_playingCards': {
+    _playingCards: {
       enumerable: true,
       value: [],
       writable: true
@@ -119,7 +119,7 @@ const drawPilePrototype = {
     return this._playingCards.splice(0, count)
   },
 
-   /**
+  /**
     * Shuffles the draw pile's playing cards.
     */
   shuffle: function () {
@@ -156,7 +156,7 @@ function createDrawPile (playingCards = []) {
     /**
      * PlayingCard[]
      */
-    '_playingCards': {
+    _playingCards: {
       enumerable: true,
       value: playingCards.slice(0),
       writable: true
