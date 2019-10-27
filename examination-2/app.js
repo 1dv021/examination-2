@@ -7,16 +7,24 @@
 
 'use strict'
 
-const game = require('./src/game')
+const PlayingCard = require('./src/PlayingCard')
+const Ranks = require('./src/Ranks')
+const Suits = require('./src/Suits')
 
-let numberOfPlayers = Number.parseInt(process.argv[2])
-if (Number.isNaN(numberOfPlayers) || numberOfPlayers < 1 || numberOfPlayers > 40) {
-  console.log('--- Defaults to 7 players ---')
-  numberOfPlayers = 7
-}
+const card = new PlayingCard(Ranks.FIVE, Suits.HEARTS)
 
-const results = game.playRound(numberOfPlayers)
+console.log(card)
 
-for (const result of results) {
-  console.log(result, '\n')
-}
+// const game = require('./src/game')
+
+// let numberOfPlayers = Number.parseInt(process.argv[2])
+// if (Number.isNaN(numberOfPlayers) || numberOfPlayers < 1 || numberOfPlayers > 40) {
+//   console.log('--- Defaults to 7 players ---')
+//   numberOfPlayers = 7
+// }
+
+// const results = game.playRound(numberOfPlayers)
+
+// for (const result of results) {
+//   console.log(result, '\n')
+// }

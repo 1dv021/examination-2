@@ -36,13 +36,22 @@ function PlayingCard (rank, suit) {
 }
 
 /**
- * Converts the value of the current PlayingCard object to its equivalent string representation.
+ * Converts the current PlayingCard object to its equivalent string representation.
  *
  * @returns {string}
  */
 PlayingCard.prototype.toString = function () {
   // If Ace, Jack, Queen, or King use the first character; otherwise the rank.
   return (this.rank > 10 ? (Object.keys(Ranks)[this.rank - 2]).substr(0, 1) : this.rank) + this.suit
+}
+
+/**
+ * Converts the the current PlayingCard object to its equivalent value representation.
+ *
+ * @returns {number}
+ */
+PlayingCard.prototype.valueOf = function () {
+  return this.rank
 }
 
 // Exports

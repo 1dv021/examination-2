@@ -48,10 +48,10 @@ class Hand {
    */
   get value () {
     // Compute the hand value where each ace is 14 points.
-    let handValue = this._playingCards.reduce((sum, x) => sum + x.rank, 0)
+    let handValue = this._playingCards.reduce((sum, card) => sum + card, 0)
 
     // ...and count each ace as one point as long as the hand value i greater than 21.
-    let numberOfAces = this._playingCards.filter(x => x.rank === Ranks.ACE).length
+    let numberOfAces = this._playingCards.filter(card => card.rank === Ranks.ACE).length
     while (numberOfAces-- > 0 && handValue > 21) {
       handValue -= 13
     }
